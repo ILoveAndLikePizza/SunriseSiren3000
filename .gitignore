@@ -1,4 +1,12 @@
+# ignore original authentication file, copy the example instead
 SunriseSirenFirmware/Authentication.h
 
+# ignore VSCode related stuff
+.vscode
+
+# ignore Glade messing around a bit with the files
 *.glade~
 \#*.glade#
+
+# ignore compiler output
+*.o
