@@ -8,5 +8,8 @@ SunriseSirenFirmware/Authentication.h
 *.glade~
 \#*.glade#
 
-# ignore compiler output
-*.o
+# ignore builds
+build/*
+
+# ignore UI files, since the Makefile will generate them
+UI.h

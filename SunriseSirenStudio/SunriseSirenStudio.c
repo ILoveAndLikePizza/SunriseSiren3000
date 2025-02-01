@@ -1,10 +1,19 @@
-#include <gtk/gtk.h>
+#include "SunriseSirenStudio.h"
 
-#include "Authentication.h"
+#include "UI.h"
+#include "File.h"
+#include "String.h"
+#include "Requests.h"
 
 static void onActivate(GtkApplication *app, gpointer user_data) {
+    curl_init();
+
+    // g_print(UI);
+    // g_print("I am looking for %s", filename_after_cwd("StudioUI.glade"));
+
     GtkBuilder *builder = gtk_builder_new();
-    gtk_builder_add_from_file(builder, "./StudioUI.glade", NULL);
+    // gtk_builder_add_from_file(builder, "./StudioUI.glade", NULL);
+    gtk_builder_add_from_string(builder, UI, -1, NULL);
 
     GtkWidget *MainWindow = gtk_builder_get_object(builder, "MainWindow");
 
@@ -16,7 +25,6 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
     gtk_widget_show_all(MainWindow);
 
     g_object_unref(builder);
-    
 }
 
 int main(int argc, char* argv[]) {

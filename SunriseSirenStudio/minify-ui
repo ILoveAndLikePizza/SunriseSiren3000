@@ -1,0 +1,14 @@
+#!/bin/bash
+
+DIR=$(dirname -- "$( readlink -f -- "$0"; )");
+
+UI_CONTENTS=$(sed -E 's/"/\\"/g;s/^\s+//g' "$DIR/StudioUI.glade" | tr -d "\n")
+
+if [ -z "$UI_CONTENTS" ]; then
+    echo "\e[31;1mAn error occured while fetching and minifying the UI."
+    exit 9
+fi
+
+echo "const gchar* UI = \"$UI_CONTENTS\";" > UI.h \
+ && echo -e "\e[32;1mUI minified successfully!\n\e[37;1m→ Now, you can run \`make\` to build Sunrise Siren Studio." \
+ || echo -e "\e[31;1mAn error occured while writing the minified UI to the header file."

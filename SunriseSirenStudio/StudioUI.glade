@@ -267,6 +267,12 @@
       </row>
     </data>
   </object>
+  <object class="GtkAdjustment" id="DigitAdjustment">
+    <property name="lower">1</property>
+    <property name="upper">4</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">1</property>
+  </object>
   <object class="GtkWindow" id="ErrorWindow">
     <property name="can-focus">False</property>
     <property name="title" translatable="yes">Connection error</property>
@@ -387,6 +393,7 @@ Check if the clock is still powered and connected to your network.</property>
               <object class="GtkStackSwitcher">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="margin-start">7</property>
                 <property name="stack">Stack</property>
               </object>
               <packing>
@@ -1389,7 +1396,7 @@ Check if the clock is still powered and connected to your network.</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="margin-top">12</property>
+                    <property name="margin-top">24</property>
                     <style>
                       <class name="suggested-action"/>
                     </style>
@@ -1705,6 +1712,411 @@ Check if the clock is still powered and connected to your network.</property>
                   <object class="GtkFixed">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="margin-top">32</property>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-0">
+                        <property name="label" translatable="yes">0</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">50</property>
+                        <property name="y">250</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-1">
+                        <property name="label" translatable="yes">1</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">50</property>
+                        <property name="y">300</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-2">
+                        <property name="label" translatable="yes">2</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">50</property>
+                        <property name="y">350</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-3">
+                        <property name="label" translatable="yes">3</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">100</property>
+                        <property name="y">400</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-4">
+                        <property name="label" translatable="yes">4</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">150</property>
+                        <property name="y">400</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-5">
+                        <property name="label" translatable="yes">5</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">200</property>
+                        <property name="y">400</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-6">
+                        <property name="label" translatable="yes">6</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">250</property>
+                        <property name="y">350</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-7">
+                        <property name="label" translatable="yes">7</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">250</property>
+                        <property name="y">300</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-8">
+                        <property name="label" translatable="yes">8</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">250</property>
+                        <property name="y">250</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-9">
+                        <property name="label" translatable="yes">9</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">200</property>
+                        <property name="y">200</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-10">
+                        <property name="label" translatable="yes">10</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">150</property>
+                        <property name="y">200</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-11">
+                        <property name="label" translatable="yes">11</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">100</property>
+                        <property name="y">200</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-12">
+                        <property name="label" translatable="yes">12</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">50</property>
+                        <property name="y">150</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-13">
+                        <property name="label" translatable="yes">13</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">50</property>
+                        <property name="y">100</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-14">
+                        <property name="label" translatable="yes">14</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">50</property>
+                        <property name="y">50</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-15">
+                        <property name="label" translatable="yes">15</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">100</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-16">
+                        <property name="label" translatable="yes">16</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">150</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-17">
+                        <property name="label" translatable="yes">17</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">200</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-18">
+                        <property name="label" translatable="yes">18</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">250</property>
+                        <property name="y">50</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-19">
+                        <property name="label" translatable="yes">19</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">250</property>
+                        <property name="y">100</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="CustomSegmentNumber-20">
+                        <property name="label" translatable="yes">20</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">50</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">250</property>
+                        <property name="y">150</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="width-request">207</property>
+                        <property name="height-request">24</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes">Custom digit generator</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                          <attribute name="size" value="15360"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="x">360</property>
+                        <property name="y">75</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes">Click the buttons on the left
+to enable or disable specific pixels.
+
+The selected combination results in a number,
+which can be applied to the number inputs above.
+
+
+Apply to digit</property>
+                        <property name="selectable">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">360</property>
+                        <property name="y">125</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="CustomDigitEnable">
+                        <property name="label" translatable="yes">Enable all</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">360</property>
+                        <property name="y">300</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="CustomDigitDisable">
+                        <property name="label" translatable="yes">Disable all</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">470</property>
+                        <property name="y">300</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="CustomDigitApply">
+                        <property name="label" translatable="yes">Go</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">34</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">625</property>
+                        <property name="y">229</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="CustomDigitApplyIndex">
+                        <property name="width-request">156</property>
+                        <property name="height-request">34</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="input-purpose">number</property>
+                        <property name="adjustment">DigitAdjustment</property>
+                        <property name="climb-rate">1</property>
+                        <property name="snap-to-ticks">True</property>
+                        <property name="numeric">True</property>
+                        <property name="wrap">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">460</property>
+                        <property name="y">229</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -1905,12 +2317,26 @@ Check if the clock is still powered and connected to your network.</property>
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkButton" id="AboutProgram">
+                    <property name="label" translatable="yes">About Sunrise Siren Studio...</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="margin-top">32</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkButton" id="RebootClock">
                     <property name="label" translatable="yes">Reboot Sunrise Siren 3000</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="margin-top">22</property>
+                    <property name="margin-top">12</property>
                     <style>
                       <class name="destructive-action"/>
                     </style>
@@ -1918,7 +2344,7 @@ Check if the clock is still powered and connected to your network.</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
                 <child>
@@ -1935,7 +2361,7 @@ Check if the clock is still powered and connected to your network.</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
               </object>

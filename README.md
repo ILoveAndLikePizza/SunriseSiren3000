@@ -39,14 +39,18 @@ Congratulations, the Sunrise Siren 3000 firmware has been flashed successfully!
     sudo apt install libgtk-3-dev libcurl4-openssl-dev libjson-c-dev
     ```
 2. Navigate to the `SunriseSirenStudio` directory.
-3. Compile the program by running:
+3. Minify the Glade sketch into a UI header file by running:
+    ```bash
+    ./minify-ui
+    ```
+4. Compile the program by running:
     ```bash
     make
     ```
-4. Optionally, install the program by running:
+5. Optionally, install the program by running:
     ```bash
     sudo make install
     ```
-5. Launch the program and follow the instructions given there.
+6. Launch the program and follow the instructions given there.
 
 Congratulations, Sunrise Siren Studio is up and running now!
