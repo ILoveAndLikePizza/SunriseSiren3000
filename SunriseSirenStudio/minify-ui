@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=$(dirname -- "$( readlink -f -- "$0"; )");
+DIR=$(dirname -- "$(readlink -f -- "$0")");
 
 UI_CONTENTS=$(sed -E 's/"/\\"/g;s/^\s+//g' "$DIR/StudioUI.glade" | tr -d "\n")
 

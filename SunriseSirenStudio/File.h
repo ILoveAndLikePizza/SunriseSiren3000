@@ -1,6 +1,8 @@
 #ifndef _file_h
 #define _file_h
 
+gchar* config_file_path[PATH_MAX];
+
 gboolean file_exists(const gchar *fname) {
     FILE *f;
     if ((f = fopen(fname, "r"))) {
