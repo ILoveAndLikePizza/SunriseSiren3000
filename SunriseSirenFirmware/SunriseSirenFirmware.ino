@@ -88,6 +88,11 @@ void setup() {
 
       server.send(200, "text/plain", "Welcome to the Sunrise Siren 3000!\nPlease use Sunrise Siren Studio to configure the device.");
     });
+    server.on("/connect", HTTP_GET, []() {
+      if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
+
+      server.send(200, "text/plain", "Yes, a Sunrise Siren 3000 is here!");
+    });
     server.on("/status", HTTP_GET, []() {
       if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
 
@@ -167,6 +172,11 @@ void setup() {
 
       currentState = CUSTOM;
       server.send(200, "text/plain", "Custom configuration has been saved and is visible now!");
+    });
+    server.on("/reboot", HTTP_PATCH, []() {
+      if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
+
+      ESP.restart();
     });
     server.onNotFound([]() {
       server.send(404, "text/plain", "404 Not Found");
