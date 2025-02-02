@@ -2,6 +2,7 @@
 
 #include "../include/UI.h"
 #include "../include/File.h"
+#include "../include/Dialog.h"
 #include "../include/String.h"
 #include "../include/Requests.h"
 
