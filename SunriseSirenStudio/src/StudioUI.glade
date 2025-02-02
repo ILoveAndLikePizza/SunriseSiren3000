@@ -88,6 +88,7 @@
                         <property name="margin-top">4</property>
                         <property name="margin-bottom">4</property>
                         <property name="hexpand">True</property>
+                        <property name="max-length">32</property>
                         <property name="placeholder-text" translatable="yes">sunrisesiren3000.local</property>
                         <property name="input-purpose">url</property>
                       </object>
@@ -131,6 +132,7 @@
                         <property name="margin-top">4</property>
                         <property name="margin-bottom">4</property>
                         <property name="hexpand">True</property>
+                        <property name="max-length">32</property>
                         <property name="input-purpose">url</property>
                       </object>
                       <packing>
@@ -173,6 +175,7 @@
                         <property name="margin-top">4</property>
                         <property name="margin-bottom">4</property>
                         <property name="hexpand">True</property>
+                        <property name="max-length">32</property>
                         <property name="visibility">False</property>
                         <property name="invisible-char">•</property>
                         <property name="input-purpose">url</property>
@@ -291,10 +294,10 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">Oops!</property>
+            <property name="label" translatable="yes">:(</property>
             <attributes>
               <attribute name="weight" value="bold"/>
-              <attribute name="size" value="15360"/>
+              <attribute name="size" value="25600"/>
             </attributes>
           </object>
           <packing>
@@ -308,8 +311,10 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">It seems like Sunrise Siren Studio failed to connect to your Sunrise Siren 3000.
-Check if the clock is still powered and connected to your network.</property>
+            <property name="label" translatable="yes">It seems like Sunrise Siren Studio failed to connect to your Sunrise Siren 3000. This can be caused by a corrupted configuration file, or the clock is disconnected from power or network.</property>
+            <property name="wrap">True</property>
+            <property name="width-chars">63</property>
+            <property name="max-width-chars">63</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -338,6 +343,19 @@ Check if the clock is still powered and connected to your network.</property>
               </packing>
             </child>
             <child>
+              <object class="GtkButton" id="RetryAfterError">
+                <property name="label" translatable="yes">Retry</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="ReconfigureAfterError">
                 <property name="label" translatable="yes">Reset configuration</property>
                 <property name="visible">True</property>
@@ -350,7 +368,7 @@ Check if the clock is still powered and connected to your network.</property>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>

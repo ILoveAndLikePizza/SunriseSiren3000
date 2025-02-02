@@ -11,5 +11,5 @@ SunriseSirenFirmware/Authentication.h
 # ignore Sunrise Siren Studio builds
 sunrise-siren-studio
 
-# ignore UI files, since the Makefile will generate them
+# ignore the minified UI file, since the `minify-ui` script will generate it
 UI.h

@@ -20,7 +20,9 @@ static void create_connection(GtkWidget *widget, gpointer user_data) {
     
     if (strstr(req, VALIDATION_STRING)) {
         // authentication successful, save and continue
-        show_message_dialog(ConnectionWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Yes!", "Connection successful!");
+
+        config_file_write(hostname, username, password);
+        reboot();
     } else if (req && request_last_status_code == 401) {
         // incorrect username or password
         show_message_dialog(ConnectionWindow, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, "Unable to connect", "Incorrect username or password!");

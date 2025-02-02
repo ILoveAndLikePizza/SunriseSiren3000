@@ -1,13 +1,21 @@
 #include "../include/SunriseSirenStudio.h"
 
 #include "../include/UI.h"
-#include "../include/File.h"
 #include "../include/Dialog.h"
 #include "../include/String.h"
 #include "../include/Requests.h"
+#include "../include/ConfigFile.h"
 
 #include "../include/Color.h"
 #include "../include/Connection.h"
+
+
+void reboot() {
+    execl("/proc/self/exe", argv0, NULL);
+
+    perror("An error occured while rebooting Sunrise Siren Studio.");
+    exit(2);
+}
 
 static void onActivate(GtkApplication *app, gpointer user_data) {
     curl_init();
@@ -16,7 +24,20 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
     GtkBuilder *builder = gtk_builder_new();
     gtk_builder_add_from_string(builder, UI, -1, NULL);
 
-    if (file_exists(config_file_path)) {
+    // step 1: check if the config file exists
+    if (config_file_exists()) {
+        // step 2: parse the config file
+        if (config_file_parse()) {
+            // step 3 (todo): fetch /status en /sensors
+            // step 4 (todo): apply to MainWindow
+            // step 5 (move here): show MainWindow
+            g_print("Connecting %s:%s to %s", username, password, hostname);
+
+        } else {
+            g_print("Big Oof");
+            exit(12);
+        }
+
         // configuration already made, TODO: test clock connection
         default_color = g_new(GdkRGBA, 1);
         alarm_color = g_new(GdkRGBA, 1);
@@ -49,11 +70,12 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         gtk_widget_show_all(ConnectionWindow);
     }
 
-
     g_object_unref(builder);
 }
 
 int main(int argc, char* argv[]) {
+    argv0 = argv[0];
+
     GtkApplication *app = gtk_application_new("sunrise.siren.studio", G_APPLICATION_FLAGS_NONE);
     g_signal_connect(app, "activate", onActivate, NULL);
 

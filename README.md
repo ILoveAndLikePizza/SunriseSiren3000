@@ -5,12 +5,12 @@
 ## Introduction
 The Sunrise Siren 3000 is the clock I have in front of my bed. Its job is to display time, temperature and humidity, but most importantly, wake me up whenever I have to wake up. I realize that you may not own a Sunrise Siren 3000 yourself, but I still like to make this project open-source :P  
 This repository consists of two relevant parts of the clock:  
-- the firmware of the clock, located in the `SunriseSirenFirmware` directory. It is flashed onto the ESP32 inside it by using the Arduino IDE;
-- the control program, **Sunrise Siren Studio**, located in the `SunriseSirenStudio` directory. It is made with the Gimp ToolKit (GTK) in C, making it only available to Linux (and WSL2) users. The program has to be compiled from source.
+- the firmware of the clock, located in the `SunriseSirenFirmware` directory. It is flashed onto the ESP32 inside it by using the [Arduino IDE](https://www.arduino.cc/en/software);
+- the control program, **Sunrise Siren Studio**, located in the `SunriseSirenStudio` directory. It is made with the [Gimp ToolKit](https://gtk.org/) (GTK) in C, making it only available to Linux (and WSL2) users. The program has to be compiled from source.
 
 ## Firmware setup
 1. Navigate to the `SunriseSirenFirmware` directory.
-2. Copy `Authentication.h.example` to `Authentication.h` and change the values in that file to whatever you like.
+2. Copy `Authentication.h.example` to `Authentication.h` and change the values in that file to whatever you like. (Note that values over 32 characters are very difficult to enter into Sunrise Siren Studio.)
 3. Launch the Arduino IDE and load the `SunriseSirenFirmware.ino` sketch.
 > **Hint:** you can add the firmware sketch to your Arduino IDE sketchbook with a symlink:
 > ```bash

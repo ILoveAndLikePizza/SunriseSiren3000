@@ -1,8 +1,6 @@
 #ifndef _requests_h
 #define _requests_h
 
-#include <curl/curl.h>
-
 gint request_last_status_code = 0;
 
 void curl_init() {
