@@ -8,53 +8,53 @@ GdkRGBA *alarm_color;
 GdkRGBA *custom_colors[5];
 
 // MainWindow
-GtkWidget *MainWindow;
+GtkWindow *MainWindow;
 // Clock settings tab
 // Colors
-GtkWidget *DefaultColor;
-GtkWidget *AlarmColor;
+GtkButton *DefaultColor;
+GtkButton *AlarmColor;
 
 // Alarms
-GtkWidget *AlarmEnable[7];
-GtkWidget *AlarmHour[7];
-GtkWidget *AlarmMinute[7];
+GtkSwitch *AlarmEnable[7];
+GtkSpinButton *AlarmHour[7];
+GtkSpinButton *AlarmMinute[7];
 
 // Advanced
-GtkWidget *EnableLeadingZero;
-GtkWidget *EnableDST;
-GtkWidget *ClockReturn;
-GtkWidget *LDRMin;
-GtkWidget *LDRMax;
+GtkSwitch *EnableLeadingZero;
+GtkSwitch *EnableDST;
+GtkSpinButton *ClockReturn;
+GtkSpinButton *LDRMin;
+GtkSpinButton *LDRMax;
 
-GtkWidget *ClockUpdate;
+GtkButton *ClockUpdate;
 
 // Custom mode tab
 // Basic configuration
-GtkWidget *CustomColor[4];
-GtkWidget *CustomColor_Colon;
-GtkWidget *CustomDigit[4];
-GtkWidget *CustomDigitEntry[4];
-GtkWidget *CustomUpdate;
+GtkButton *CustomColor[4];
+GtkButton *CustomColor_Colon;
+GtkComboBox *CustomDigit[4];
+GtkEntry *CustomDigitEntry[4];
+GtkButton *CustomUpdate;
 
 // Custom digit generator
-GtkWidget *CustomSegmentNumber[21];
-GtkWidget *CustomDigitAbout;
-GtkWidget *CustomDigitApplyIndex;
-GtkWidget *CustomDigitApply;
-GtkWidget *CustomDigitEnableAll;
-GtkWidget *CustomDigitDisableAll;
+GtkToggleButton *CustomSegmentNumber[21];
+GtkButton *CustomDigitAbout;
+GtkEntry *CustomDigitApplyIndex;
+GtkButton *CustomDigitApply;
+GtkButton *CustomDigitEnableAll;
+GtkButton *CustomDigitDisableAll;
 
 // Miscellaneous tab
 // Sensor information
-GtkWidget *LDRReading;
-GtkWidget *SHT21TemperatureReading;
-GtkWidget *SHT21HumidityReading;
-GtkWidget *SensorRefresh;
+GtkLabel *LDRReading;
+GtkLabel *SHT21TemperatureReading;
+GtkLabel *SHT21HumidityReading;
+GtkButton *SensorRefresh;
 
 // about/danger zone
-GtkWidget *AboutProgram;
-GtkWidget *RebootClock;
-GtkWidget *Reconfigure;
+GtkButton *AboutProgram;
+GtkButton *RebootClock;
+GtkButton *Reconfigure;
 
 // ConnectionWindow
 GtkWindow *ConnectionWindow;
@@ -64,9 +64,12 @@ GtkEntry *ConnectPassword;
 GtkButton *ConnectConfirm;
 
 // ErrorWindow
-GtkWidget *ErrorWindow;
-GtkWidget *CloseAfterError;
-GtkWidget *ReconfigureAfterError;
+GtkWindow *ErrorWindow;
+GtkButton *CloseAfterError;
+GtkButton *ReconfigureAfterError;
+
+// RebootDialog
+GtkDialog *RebootDialog;
 
 static void onActivate(GtkApplication *app, gpointer user_data);
 
