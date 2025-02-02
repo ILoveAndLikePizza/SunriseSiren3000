@@ -3,6 +3,8 @@
 
 #include <curl/curl.h>
 
+gint request_last_status_code = 0;
+
 void curl_init() {
     curl_global_init(CURL_GLOBAL_ALL);
 }
@@ -16,7 +18,6 @@ gchar* request(gchar* url, gchar* username, gchar* password) {
     CURL *curl = curl_easy_init();
     if (!curl) return "Error while initializing CURL";
 
-    gint status_code;
     gchar *userpwd[strlen(username) + strlen(password) + 32];
     sprintf(userpwd, "%s:%s", str_escape(username, ':'), str_escape(password, ':'));
 
@@ -32,7 +33,7 @@ gchar* request(gchar* url, gchar* username, gchar* password) {
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, response_buffer);
     CURLcode response = curl_easy_perform(curl);
 
-    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &status_code);
+    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &request_last_status_code);
     if (response == CURLE_OK) return response_buffer;
 
     curl_global_cleanup();

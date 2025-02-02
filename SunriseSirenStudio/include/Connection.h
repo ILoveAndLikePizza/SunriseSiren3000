@@ -12,7 +12,20 @@ static void create_connection(GtkWidget *widget, gpointer user_data) {
     sprintf(url, "http://%s/connect", hostname);
 
     gchar* req = request(url, username, password);
-    g_print("Result is %s", req);
+    
+    if (req == VALIDATION_STRING) {
+        // authentication successful, save and continue
+
+    } else if (req && request_last_status_code == 401) {
+        // incorrect username or password
+
+    } else if (req) {
+        // failed to validate
+
+    } else {
+        // request failed, nothing found at all
+
+    }
 }
 
 #endif

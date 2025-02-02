@@ -1,12 +1,12 @@
-#include "SunriseSirenStudio.h"
+#include "../include/SunriseSirenStudio.h"
 
-#include "UI.h"
-#include "File.h"
-#include "String.h"
-#include "Requests.h"
+#include "../include/UI.h"
+#include "../include/File.h"
+#include "../include/String.h"
+#include "../include/Requests.h"
 
-#include "Color.h"
-#include "Connection.h"
+#include "../include/Color.h"
+#include "../include/Connection.h"
 
 static void onActivate(GtkApplication *app, gpointer user_data) {
     curl_init();
