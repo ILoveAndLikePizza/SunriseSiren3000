@@ -183,12 +183,12 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         get_sensor_values();
 
         AboutProgram = gtk_builder_get_object(builder, "AboutProgram");
+        g_signal_connect(AboutProgram, "clicked", show_about_dialog, NULL);
 
         RebootClock = gtk_builder_get_object(builder, "RebootClock");
 
         Reconfigure = gtk_builder_get_object(builder, "Reconfigure");
         g_signal_connect(Reconfigure, "clicked", reconfigure, NULL);
-
 
         gtk_application_add_window(app, MainWindow);
         gtk_widget_show_all(MainWindow);

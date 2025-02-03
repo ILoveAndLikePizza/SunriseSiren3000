@@ -12,7 +12,22 @@ gint show_message_dialog(GtkWindow *parent, GtkMessageType type, GtkButtonsType 
 }
 
 void show_about_dialog() {
+    GStrvBuilder *credit_builder = g_strv_builder_new();
+    g_strv_builder_add(credit_builder, "ngkon");
+    GStrv *credits = g_strv_builder_end(credit_builder);
 
+    gtk_show_about_dialog(MainWindow,
+        "program-name", "Sunrise Siren Studio",
+        "title", "About Sunrise Siren Studio",
+        "version", "v1.0.0",
+        "license-type", GTK_LICENSE_GPL_3_0,
+        "copyright", "© 2025 ngkon. All rights reserved.",
+        "authors", credits,
+        "artists", credits,
+        "documenters", credits,
+    NULL);
+
+    g_strfreev(credits);
 }
 
 #endif

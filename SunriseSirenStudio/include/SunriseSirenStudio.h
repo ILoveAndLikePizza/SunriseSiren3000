@@ -50,7 +50,6 @@ GtkButton *CustomUpdate;
 
 // Custom digit generator
 GtkToggleButton *CustomSegmentNumber[21];
-GtkButton *CustomDigitAbout;
 GtkEntry *CustomDigitApplyIndex;
 GtkButton *CustomDigitApply;
 GtkButton *CustomDigitEnableAll;
@@ -81,8 +80,8 @@ GtkButton *CloseAfterError;
 GtkButton *RetryAfterError;
 GtkButton *ReconfigureAfterError;
 
-// RebootDialog
-GtkDialog *RebootDialog;
+// RebootWindow
+GtkWindow *RebootWindow;
 
 enum TargetWindow;
 
