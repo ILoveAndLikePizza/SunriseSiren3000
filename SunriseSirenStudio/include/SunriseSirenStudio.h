@@ -11,6 +11,9 @@ gchar* hostname[32];
 gchar* username[32];
 gchar* password[32];
 
+json_object *clock_status;
+json_object *clock_sensors;
+
 GdkRGBA *default_color;
 GdkRGBA *alarm_color;
 GdkRGBA *custom_colors[5];
@@ -80,7 +83,9 @@ GtkButton *ReconfigureAfterError;
 // RebootDialog
 GtkDialog *RebootDialog;
 
+enum TargetWindow;
 
+void quit();
 void reboot();
 
 static void onActivate(GtkApplication *app, gpointer user_data);

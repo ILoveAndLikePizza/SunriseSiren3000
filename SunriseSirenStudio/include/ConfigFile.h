@@ -43,4 +43,10 @@ void config_file_write(gchar* hostname, gchar* username, gchar* password) {
     json_object_to_file_ext(config_file_path, config_file, JSON_C_TO_STRING_PRETTY);
 }
 
+gboolean config_file_delete() {
+    if (config_file_exists()) return (remove(config_file_path) == 0);
+
+    return TRUE;
+}
+
 #endif
