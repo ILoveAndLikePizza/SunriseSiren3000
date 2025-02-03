@@ -1,6 +1,7 @@
 #ifndef _sunrise_siren_studio_h
 #define _sunrise_siren_studio_h
 
+#include <math.h>
 #include <gtk/gtk.h>
 #include <curl/curl.h>
 #include <json-c/json.h>

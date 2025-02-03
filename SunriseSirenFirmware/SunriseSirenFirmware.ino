@@ -38,6 +38,7 @@ enum State currentState = CLOCK;
 unsigned int clockReturn;
 bool leadingZero;
 bool enableDST;
+int alarmsEnabled;
 String alarmTimes;
 
 byte customSegments[4][7];
@@ -52,11 +53,13 @@ void loadSettings() {
   clockReturn = pref.getInt("clock-return");
   leadingZero = pref.getBool("leading-zero");
   enableDST = pref.getBool("enable-dst");
+  alarmsEnabled = pref.getInt("alarms-enabled");
   alarmTimes = pref.getString("alarm-times");
 }
 
 void updateAlarms() {
   for (int i=0; i<7; i++) {
+    alarms[i].enabled = (alarmsEnabled & (int) pow(2, i)) > 0;
     alarms[i].time = alarmTimes.substring(i * 4, i * 4 + 4);
     alarms[i].reset();
   }
@@ -100,13 +103,21 @@ void setup() {
       output.concat(lights.defaultColor.as_uint32_t());
       output.concat(",\n    \"alarm\": ");
       output.concat(lights.alarmColor.as_uint32_t());
-      output.concat("\n  },\n  \"alarmTimes\": \"");
+      output.concat("\n  },\n  \"alarmsEnabled\": ");
+      output.concat(alarmsEnabled);
+      output.concat(",\n  \"alarmTimes\": \"");
       output.concat(alarmTimes);
       output.concat("\",\n  \"leadingZero\": ");
       output.concat(leadingZero ? "true" : "false");
       output.concat(",\n  \"enableDST\": ");
       output.concat(enableDST ? "true" : "false");
-      output.concat("\n}");
+      output.concat(",\n  \"clockReturn\": ");
+      output.concat(clockReturn / 1000);
+      output.concat(",\n  \"ldr\": {\n    \"min\": ");
+      output.concat(ldr.minValue);
+      output.concat(",\n    \"max\": ");
+      output.concat(ldr.maxValue);
+      output.concat("\n  }\n}");
       
       server.send(200, "application/json", output);
     });
@@ -149,6 +160,8 @@ void setup() {
       if (server.hasArg("enable-dst") && server.arg("enable-dst").toInt() != pref.getBool("enable-dst"))
         pref.putBool("enable-dst", server.arg("enable-dst").toInt() == 1);
 
+      if (server.hasArg("alarms-enabled") && server.arg("alarms-enabled").toInt() != pref.getInt("alarms-enabled"))
+        pref.putInt("alarms-enabled", server.arg("alarms-enabled").toInt());
       if (server.hasArg("alarm-times") && !server.arg("alarm-times").equals(pref.getString("alarm-times")))
         pref.putString("alarm-times", server.arg("alarm-times"));
 

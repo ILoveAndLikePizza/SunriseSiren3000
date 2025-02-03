@@ -8,10 +8,12 @@ class SunriseSiren3000Alarm {
 
   public:
     String time;
+    bool enabled; // whether the alarm is *supposed* to trip
     bool tripping; // whether the alarm is active/beeping
     bool activity; // every other second or so, whether the LEDs and buzzer should flash/beep
 
     bool update(String now) {
+      if (!this->enabled) return false;
       bool justTripped = false;
 
       if (now == this->time && !this->timePassed) {

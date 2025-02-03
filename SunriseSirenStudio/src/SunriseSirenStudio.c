@@ -26,6 +26,47 @@ void reboot() {
     exit(2);
 }
 
+void reboot_clock() {
+
+}
+
+void reconfigure() {
+    config_file_delete();
+    reboot();
+}
+
+void get_sensor_values() {
+    gchar* sensors_url[PATH_MAX];
+    sprintf(sensors_url, "http://%s/sensors", hostname);
+    gchar *sensors_response = request(sensors_url, username, password);
+
+    if (sensors_response) {
+        if (clock_sensors = json_tokener_parse(sensors_response)) {
+            gchar *ldr_label[4];
+            gchar *temperature_label[20];
+            gchar *humidity_label[20];
+
+            sprintf(ldr_label, "%d", json_object_get_int(json_object_object_get(clock_sensors, "ldr")));
+            sprintf(
+                temperature_label,
+                "%i → %.2f °C",
+                json_object_get_int(json_object_object_get(json_object_object_get(clock_sensors, "temperature"), "raw")),
+                json_object_get_double(json_object_object_get(json_object_object_get(clock_sensors, "temperature"), "translated"))
+            );
+            sprintf(
+                humidity_label,
+                "%i → %.2f%%",
+                json_object_get_int(json_object_object_get(json_object_object_get(clock_sensors, "humidity"), "raw")),
+                json_object_get_double(json_object_object_get(json_object_object_get(clock_sensors, "humidity"), "translated"))
+            );
+
+            gtk_label_set_label(LDRReading, ldr_label);
+            gtk_label_set_label(SHT21TemperatureReading, temperature_label);
+            gtk_label_set_label(SHT21HumidityReading, humidity_label);
+        }
+    }
+}
+
 static void onActivate(GtkApplication *app, gpointer user_data) {
     curl_init();
     sprintf(config_file_path, "%s/.config/SunriseSirenStudio.json", g_getenv("HOME"));
@@ -38,19 +79,11 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         if (config_file_parse()) {
             // step 3: fetch /status en /sensors
             gchar* status_url[PATH_MAX];
-            gchar* sensors_url[PATH_MAX];
-
             sprintf(status_url, "http://%s/status", hostname);
-            sprintf(sensors_url, "http://%s/sensors", hostname);
-
             gchar *status_response = request(status_url, username, password);
-            gchar *sensors_response = request(sensors_url, username, password);
 
-            if (status_response && sensors_response) {
-                clock_status = json_tokener_parse(request(status_url, username, password));
-                clock_sensors = json_tokener_parse(request(sensors_url, username, password));
-
-                if (clock_status && clock_sensors) {
+            if (status_response) {
+                if (clock_status = json_tokener_parse(status_response)) {
                     // success!
                     target = WINDOW_MAIN;
                 } else {
@@ -91,10 +124,10 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         g_signal_connect(AlarmColor, "clicked", pick_alarm_color, NULL);
 
         // Alarms
-        for (int i=0; i<7; i++) {
-            gchar* alarm_hour[2];
-            gchar* alarm_minute[2];
+        gchar* alarm_times = json_object_get_string(json_object_object_get(clock_status, "alarmTimes"));
+        gint alarms_enabled = json_object_get_int(json_object_object_get(clock_status, "alarmsEnabled"));
 
+        for (int i=0; i<7; i++) {
             gchar* enable_id[13];
             gchar* hour_id[11];
             gchar* minute_id[13];
@@ -102,16 +135,60 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
             sprintf(enable_id, "AlarmEnable-%i", i);
             sprintf(hour_id, "AlarmHour-%i", i);
             sprintf(minute_id, "AlarmMinute-%i", i);
-            g_utf8_strncpy(alarm_hour, json_object_get_string(json_object_object_get(clock_status, "alarmTimes")), 2);
 
             AlarmEnable[i] = gtk_builder_get_object(builder, enable_id);
             AlarmHour[i] = gtk_builder_get_object(builder, hour_id);
             AlarmMinute[i] = gtk_builder_get_object(builder, minute_id);
 
-            // todo: update widgets
+            gchar hour[3] = {alarm_times[i * 4], alarm_times[i * 4 + 1], '\0'};
+            gchar minute[3] = {alarm_times[i * 4 + 2], alarm_times[i * 4 + 3], '\0'};
+            gtk_switch_set_active(AlarmEnable[i], (alarms_enabled & (gint) pow(2, i)) > 0);
+
+            gtk_spin_button_set_adjustment(AlarmHour[i], gtk_adjustment_new(atoi(hour), 0, 24, 1, 1, 1));
+            gtk_spin_button_set_numeric(AlarmHour[i], TRUE);
+            gtk_spin_button_set_wrap(AlarmHour[i], TRUE);
+
+            gtk_spin_button_set_adjustment(AlarmMinute[i], gtk_adjustment_new(atoi(minute), 0, 60, 1, 1, 1));
+            gtk_spin_button_set_numeric(AlarmMinute[i], TRUE);
+            gtk_spin_button_set_wrap(AlarmMinute[i], TRUE);
         }
 
-        // todo: advanced + other tabs
+        // Advanced
+        EnableLeadingZero = gtk_builder_get_object(builder, "EnableLeadingZero");
+        gtk_switch_set_active(EnableLeadingZero, json_object_get_boolean(json_object_object_get(clock_status, "leadingZero")));
+
+        EnableDST = gtk_builder_get_object(builder, "EnableDST");
+        gtk_switch_set_active(EnableDST, json_object_get_boolean(json_object_object_get(clock_status, "enableDST")));
+
+        ClockReturn = gtk_builder_get_object(builder, "ClockReturn");
+        gtk_spin_button_set_value(ClockReturn, json_object_get_int(json_object_object_get(clock_status, "clockReturn")));
+
+        LDRMin = gtk_builder_get_object(builder, "LDRMin");
+        gtk_spin_button_set_value(LDRMin, json_object_get_int(json_object_object_get(json_object_object_get(clock_status, "ldr"), "min")));
+
+        LDRMax = gtk_builder_get_object(builder, "LDRMax");
+        gtk_spin_button_set_value(LDRMax, json_object_get_int(json_object_object_get(json_object_object_get(clock_status, "ldr"), "max")));
+
+        // Custom
+        // TODO
+
+        // Miscellaneous
+        // Sensor information
+        LDRReading = gtk_builder_get_object(builder, "LDRReading");
+        SHT21TemperatureReading = gtk_builder_get_object(builder, "SHT21TemperatureReading");
+        SHT21HumidityReading = gtk_builder_get_object(builder, "SHT21HumidityReading");
+        
+        SensorRefresh = gtk_builder_get_object(builder, "SensorRefresh");
+        g_signal_connect(SensorRefresh, "clicked", get_sensor_values, NULL);
+        get_sensor_values();
+
+        AboutProgram = gtk_builder_get_object(builder, "AboutProgram");
+
+        RebootClock = gtk_builder_get_object(builder, "RebootClock");
+
+        Reconfigure = gtk_builder_get_object(builder, "Reconfigure");
+        g_signal_connect(Reconfigure, "clicked", reconfigure, NULL);
+
 
         gtk_application_add_window(app, MainWindow);
         gtk_widget_show_all(MainWindow);
@@ -137,7 +214,7 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         g_signal_connect(RetryAfterError, "clicked", reboot, NULL);
 
         ReconfigureAfterError = gtk_builder_get_object(builder, "ReconfigureAfterError");
-        g_signal_connect(ReconfigureAfterError, "clicked", config_file_delete, NULL);
+        g_signal_connect(ReconfigureAfterError, "clicked", reconfigure, NULL);
 
         gtk_application_add_window(app, ErrorWindow);
         gtk_widget_show_all(ErrorWindow);
