@@ -8,6 +8,22 @@ size_t write_memory_callback(void *ptr, size_t size, size_t nmemb, void *data) {
     return size * nmemb;
 }
 
+gchar* str_escape(gchar* input, gchar to_escape) {
+    gint len = strlen(input);
+    gchar* escaped = (gchar*)g_malloc(2 * len + 1);
+    gint j = 0;
+
+    for (gint i=0; i<len; i++) {
+        if (input[i] == to_escape) {
+            escaped[j++] = '\\';
+        }
+        escaped[j++] = input[i];
+    }
+
+    escaped[j] = '\0';
+    return escaped;
+}
+
 gchar* request(gchar* method, gchar* url, gchar* username, gchar* password,  gchar* post_data) {
     CURL *curl = curl_easy_init();
     if (!curl) return "Error while initializing CURL";
