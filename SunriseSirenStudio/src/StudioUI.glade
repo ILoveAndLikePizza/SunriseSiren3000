@@ -294,6 +294,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
+            <property name="margin-start">10</property>
             <property name="label" translatable="yes">:(</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -311,7 +312,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">It seems like Sunrise Siren Studio failed to connect to your Sunrise Siren 3000. This can be caused by a corrupted configuration file, or the clock is disconnected from power or network.</property>
+            <property name="label" translatable="yes">It seems like Sunrise Siren Studio failed to connect to your Sunrise Siren 3000. This can be caused by outdated credentials, or the clock is disconnected from power or network.</property>
             <property name="wrap">True</property>
             <property name="width-chars">63</property>
             <property name="max-width-chars">63</property>
@@ -357,7 +358,7 @@
             </child>
             <child>
               <object class="GtkButton" id="ReconfigureAfterError">
-                <property name="label" translatable="yes">Reset configuration</property>
+                <property name="label" translatable="yes">Reset credentials</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
@@ -2443,7 +2444,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="Reconfigure">
-                    <property name="label" translatable="yes">Reset Sunrise Siren Studio configuration</property>
+                    <property name="label" translatable="yes">Reset Sunrise Siren Studio credentials</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>

@@ -29,10 +29,10 @@ void reboot_clock() {
 }
 
 void reconfigure() {
-    gint prompt = show_message_dialog(MainWindow, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK_CANCEL, "Reset configuration?", "Be careful! Your current configuration will be lost!");
+    gint prompt = show_message_dialog(MainWindow, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK_CANCEL, "Reset credentials?", "Note that you will have to sign in again!");
 
     if (prompt == GTK_RESPONSE_OK) {
-        config_file_delete();
+        credentials_reset();
         reboot();
     }
 }
@@ -139,7 +139,7 @@ static void create_connection(GtkWidget *widget, gpointer user_data) {
     if (strstr(req, VALIDATION_STRING)) {
         // authentication successful, save and continue
 
-        config_file_write(hostname, username, password);
+        credentials_write(hostname, username, password);
         reboot();
     } else if (req && request_last_status_code == 401) {
         // incorrect username or password

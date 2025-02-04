@@ -3,7 +3,7 @@
 #include "../include/UI.h"
 #include "../include/Dialog.h"
 #include "../include/Requests.h"
-#include "../include/ConfigFile.h"
+#include "../include/Credentials.h"
 
 #include "../include/WindowUtilities.h"
 
@@ -15,33 +15,29 @@ enum TargetWindow {
 
 static void onActivate(GtkApplication *app, gpointer user_data) {
     curl_global_init(CURL_GLOBAL_ALL);
-    sprintf(config_file_path, "%s/.config/SunriseSirenStudio.json", g_getenv("HOME"));
+    credentials = g_settings_new("org.sunrise-siren-studio.credentials");
 
     enum TargetWindow target;
 
     // step 1: check if the config file exists
-    if (config_file_exists()) {
+    if (credentials_exist()) {
         // step 2: parse the config file
-        if (config_file_parse()) {
-            // step 3: fetch /status en /sensors
-            gchar* status_url[PATH_MAX];
-            sprintf(status_url, "http://%s/status", hostname);
-            gchar *status_response = request("GET", status_url, username, password, "");
+        credentials_read();
+        // step 3: fetch /status en /sensors
+        gchar* status_url[PATH_MAX];
+        sprintf(status_url, "http://%s/status", hostname);
+        gchar *status_response = request("GET", status_url, username, password, "");
 
-            if (status_response) {
-                if (clock_status = json_tokener_parse(status_response)) {
-                    // success!
-                    target = WINDOW_MAIN;
-                } else {
-                    // failed to parse clock data
-                    target = WINDOW_ERROR;
-                }
+        if (status_response) {
+            if (clock_status = json_tokener_parse(status_response)) {
+                // success!
+                target = WINDOW_MAIN;
             } else {
-                // failed to fetch clock data
+                // failed to parse clock data
                 target = WINDOW_ERROR;
             }
         } else {
-            // error while parsing config file
+            // failed to fetch clock data
             target = WINDOW_ERROR;
         }
 

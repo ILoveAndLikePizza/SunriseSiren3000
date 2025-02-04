@@ -8,6 +8,10 @@
 #include <curl/curl.h>
 #include <json-c/json.h>
 
+#ifndef PATH_MAX
+    #define PATH_MAX 1024 // stfu VSCode
+#endif
+
 char* argv0;
 
 gchar* hostname[32];
@@ -16,6 +20,8 @@ gchar* password[32];
 
 json_object *clock_status;
 json_object *clock_sensors;
+
+GSettings *credentials;
 
 GdkRGBA *default_color;
 GdkRGBA *alarm_color;

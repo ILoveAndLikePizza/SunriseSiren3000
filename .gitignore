@@ -11,5 +11,8 @@ SunriseSirenFirmware/Authentication.h
 # ignore Sunrise Siren Studio builds
 sunrise-siren-studio
 
+# ignore compiled GSchemas
+gschemas.compiled
+
 # ignore the minified UI file, since the `minify-ui` script will generate it
 UI.h
