@@ -1,7 +1,9 @@
 #ifndef _sunrise_siren_studio_h
 #define _sunrise_siren_studio_h
 
+#include <stdlib.h>
 #include <math.h>
+
 #include <gtk/gtk.h>
 #include <curl/curl.h>
 #include <json-c/json.h>
@@ -41,6 +43,7 @@ GtkSpinButton *LDRMax;
 GtkButton *ClockUpdate;
 
 // Custom mode tab
+GtkListStore *CustomDigits;
 // Basic configuration
 GtkButton *CustomColor[4];
 GtkButton *CustomColor_Colon;
@@ -79,9 +82,6 @@ GtkWindow *ErrorWindow;
 GtkButton *CloseAfterError;
 GtkButton *RetryAfterError;
 GtkButton *ReconfigureAfterError;
-
-// RebootWindow
-GtkWindow *RebootWindow;
 
 enum TargetWindow;
 

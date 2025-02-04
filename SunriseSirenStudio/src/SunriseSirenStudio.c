@@ -6,8 +6,7 @@
 #include "../include/Requests.h"
 #include "../include/ConfigFile.h"
 
-#include "../include/Color.h"
-#include "../include/Connection.h"
+#include "../include/WindowUtilities.h"
 
 enum TargetWindow {
     WINDOW_MAIN,
@@ -15,60 +14,8 @@ enum TargetWindow {
     WINDOW_ERROR
 };
 
-void quit() {
-    exit(0);
-}
-
-void reboot() {
-    execl("/proc/self/exe", argv0, NULL);
-
-    perror("An error occured while rebooting Sunrise Siren Studio.");
-    exit(2);
-}
-
-void reboot_clock() {
-
-}
-
-void reconfigure() {
-    config_file_delete();
-    reboot();
-}
-
-void get_sensor_values() {
-    gchar* sensors_url[PATH_MAX];
-    sprintf(sensors_url, "http://%s/sensors", hostname);
-    gchar *sensors_response = request(sensors_url, username, password);
-
-    if (sensors_response) {
-        if (clock_sensors = json_tokener_parse(sensors_response)) {
-            gchar *ldr_label[4];
-            gchar *temperature_label[20];
-            gchar *humidity_label[20];
-
-            sprintf(ldr_label, "%d", json_object_get_int(json_object_object_get(clock_sensors, "ldr")));
-            sprintf(
-                temperature_label,
-                "%i → %.2f °C",
-                json_object_get_int(json_object_object_get(json_object_object_get(clock_sensors, "temperature"), "raw")),
-                json_object_get_double(json_object_object_get(json_object_object_get(clock_sensors, "temperature"), "translated"))
-            );
-            sprintf(
-                humidity_label,
-                "%i → %.2f%%",
-                json_object_get_int(json_object_object_get(json_object_object_get(clock_sensors, "humidity"), "raw")),
-                json_object_get_double(json_object_object_get(json_object_object_get(clock_sensors, "humidity"), "translated"))
-            );
-
-            gtk_label_set_label(LDRReading, ldr_label);
-            gtk_label_set_label(SHT21TemperatureReading, temperature_label);
-            gtk_label_set_label(SHT21HumidityReading, humidity_label);
-        }
-    }
-}
-
 static void onActivate(GtkApplication *app, gpointer user_data) {
-    curl_init();
+    curl_global_init(CURL_GLOBAL_ALL);
     sprintf(config_file_path, "%s/.config/SunriseSirenStudio.json", g_getenv("HOME"));
 
     enum TargetWindow target;
@@ -80,7 +27,7 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
             // step 3: fetch /status en /sensors
             gchar* status_url[PATH_MAX];
             sprintf(status_url, "http://%s/status", hostname);
-            gchar *status_response = request(status_url, username, password);
+            gchar *status_response = request("GET", status_url, username, password, "");
 
             if (status_response) {
                 if (clock_status = json_tokener_parse(status_response)) {
@@ -108,20 +55,33 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
     gtk_builder_add_from_string(builder, UI, -1, NULL);
 
     if (target == WINDOW_MAIN) {
-        default_color = g_new(GdkRGBA, 1);
-        alarm_color = g_new(GdkRGBA, 1);
-        default_color->alpha = 1;
-        alarm_color->alpha = 1;
-
         // MainWindow
         MainWindow = gtk_builder_get_object(builder, "MainWindow");
         // Clock settings tab
         // Colors
         DefaultColor = gtk_builder_get_object(builder, "DefaultColor");
-        g_signal_connect(DefaultColor, "clicked", pick_default_color, NULL);
+
+        glong current_default_color = json_object_get_int64(json_object_object_get(json_object_object_get(clock_status, "colors"), "default"));
+        default_color = g_new(GdkRGBA, 1);
+        default_color->red = (current_default_color / (int) pow(256, 2) % 256) / 255;
+        default_color->green = (current_default_color / (int) pow(256, 1) % 256) / 255;
+        default_color->blue = (current_default_color / (int) pow(256, 0) % 256) / 255;
+        default_color->alpha = 1;
+
+        gtk_widget_override_background_color(DefaultColor, GTK_STATE_NORMAL, default_color);
+        g_signal_connect(DefaultColor, "clicked", pick_color, &default_color);
 
         AlarmColor = gtk_builder_get_object(builder, "AlarmColor");
-        g_signal_connect(AlarmColor, "clicked", pick_alarm_color, NULL);
+
+        glong current_alarm_color = json_object_get_int64(json_object_object_get(json_object_object_get(clock_status, "colors"), "alarm"));
+        alarm_color = g_new(GdkRGBA, 1);
+        alarm_color->red = (current_alarm_color / (int) pow(256, 2) % 256) / 255;
+        alarm_color->green = (current_alarm_color / (int) pow(256, 1) % 256) / 255;
+        alarm_color->blue = (current_alarm_color / (int) pow(256, 0) % 256) / 255;
+        alarm_color->alpha = 1;
+
+        gtk_widget_override_background_color(AlarmColor, GTK_STATE_NORMAL, alarm_color);
+        g_signal_connect(AlarmColor, "clicked", pick_color, &alarm_color);
 
         // Alarms
         gchar* alarm_times = json_object_get_string(json_object_object_get(clock_status, "alarmTimes"));
@@ -170,7 +130,60 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         gtk_spin_button_set_value(LDRMax, json_object_get_int(json_object_object_get(json_object_object_get(clock_status, "ldr"), "max")));
 
         // Custom
-        // TODO
+        CustomDigits = gtk_builder_get_object(builder, "CustomDigits");
+
+        for (int i=0; i<4; i++) {
+            gchar* colorbutton_id[13];
+            gchar* combobox_id[13];
+            gchar* colorentry_id[18];
+
+            sprintf(colorbutton_id, "CustomColor-%i", i);
+            sprintf(combobox_id, "CustomDigit-%i", i);
+            sprintf(colorentry_id, "CustomDigitEntry-%i", i);
+
+            CustomColor[i] = gtk_builder_get_object(builder, colorbutton_id);
+            CustomDigit[i] = gtk_builder_get_object(builder, combobox_id);
+            CustomDigitEntry[i] = gtk_builder_get_object(builder, colorentry_id);
+
+            custom_colors[i] = g_new(GdkRGBA, 1);
+            custom_colors[i]->red = 1;
+            custom_colors[i]->green = 1;
+            custom_colors[i]->blue = 1;
+            custom_colors[i]->alpha = 1;
+            gtk_widget_override_background_color(CustomColor[i], GTK_STATE_NORMAL, custom_colors[i]);
+
+            g_signal_connect(CustomColor[i], "clicked", pick_color, &custom_colors[i]);
+            g_signal_connect(CustomDigit[i], "changed", validate_custom_entry_sensitive, CustomDigitEntry[i]);
+        }
+
+        // colon (index 2 of custom_colors)
+        CustomColor_Colon = gtk_builder_get_object(builder, "CustomColor-Colon");
+        custom_colors[2] = g_new(GdkRGBA, 1);
+        custom_colors[2]->red = 1;
+        custom_colors[2]->green = 1;
+        custom_colors[2]->blue = 1;
+        custom_colors[2]->alpha = 1;
+
+        gtk_widget_override_background_color(CustomColor_Colon, GTK_STATE_NORMAL, custom_colors[2]);
+        g_signal_connect(CustomColor_Colon, "clicked", pick_color, &custom_colors[2]);
+
+        for (int i=0; i<21; i++) {
+            gchar* pixel_id[22];
+            sprintf(pixel_id, "CustomSegmentNumber-%02i", i);
+
+            CustomSegmentNumber[i] = gtk_builder_get_object(builder, pixel_id);
+        }
+
+        CustomDigitEnableAll = gtk_builder_get_object(builder, "CustomDigitEnableAll");
+        g_signal_connect(CustomDigitEnableAll, "clicked", set_all_custom_pixels, TRUE);
+
+        CustomDigitDisableAll = gtk_builder_get_object(builder, "CustomDigitDisableAll");
+        g_signal_connect(CustomDigitDisableAll, "clicked", set_all_custom_pixels, FALSE);
+
+        CustomDigitApplyIndex = gtk_builder_get_object(builder, "CustomDigitApplyIndex");
+        CustomDigitApply = gtk_builder_get_object(builder, "CustomDigitApply");
+        g_signal_connect(CustomDigitApply, "clicked", set_custom_digit, NULL);
+
 
         // Miscellaneous
         // Sensor information
@@ -186,6 +199,7 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         g_signal_connect(AboutProgram, "clicked", show_about_dialog, NULL);
 
         RebootClock = gtk_builder_get_object(builder, "RebootClock");
+        g_signal_connect(RebootClock, "clicked", reboot_clock, NULL);
 
         Reconfigure = gtk_builder_get_object(builder, "Reconfigure");
         g_signal_connect(Reconfigure, "clicked", reconfigure, NULL);

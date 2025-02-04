@@ -3,16 +3,12 @@
 
 gint request_last_status_code = 0;
 
-void curl_init() {
-    curl_global_init(CURL_GLOBAL_ALL);
-}
-
 size_t write_memory_callback(void *ptr, size_t size, size_t nmemb, void *data) {
     memcpy(data, ptr, size * nmemb);
     return size * nmemb;
 }
 
-gchar* request(gchar* url, gchar* username, gchar* password) {
+gchar* request(gchar* method, gchar* url, gchar* username, gchar* password,  gchar* post_data) {
     CURL *curl = curl_easy_init();
     if (!curl) return "Error while initializing CURL";
 
@@ -23,6 +19,8 @@ gchar* request(gchar* url, gchar* username, gchar* password) {
     if (!response_buffer) return NULL;
 
     curl_easy_setopt(curl, CURLOPT_URL, url);
+    curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, method);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data);
     curl_easy_setopt(curl, CURLOPT_USERPWD, userpwd);
     curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
     curl_easy_setopt(curl, CURLOPT_TIMEOUT, 12L);
