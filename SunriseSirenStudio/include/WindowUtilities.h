@@ -120,6 +120,29 @@ void get_sensor_values() {
     }
 }
 
+static void apply_clock_settings(GtkWidget *widget, gpointer user_data) {
+    // step 1 (todo): collect all settings
+
+    glong default_c_number = default_color->red * 255 * (int) pow(256, 2)
+        + default_color->green * 255 * (int) pow(256, 1)
+        + default_color->blue * 255 * (int) pow(256, 0);
+    glong alarm_c_number = alarm_color->red * 255 * (int) pow(256, 2)
+        + alarm_color->green * 255 * (int) pow(256, 1)
+        + alarm_color->blue * 255 * (int) pow(256, 0);
+
+    // step 2 (todo): make a request string
+
+    // step 3 (todo): yeet a request
+}
+
+static void apply_custom_settings(GtkWidget *widget, gpointer user_data) {
+    // step 1 (todo): collect all settings
+
+    // step 2 (todo): make a request string
+
+    // step 3 (todo): yeet a request
+}
+
 // ConnectionWindow
 static void create_connection(GtkWidget *widget, gpointer user_data) {
     gchar* hostname = gtk_entry_get_text(ConnectHostname);
