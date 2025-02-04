@@ -53,4 +53,10 @@ Congratulations, the Sunrise Siren 3000 firmware has been flashed successfully!
     ```
 6. Launch the program and follow the instructions given there.
 
+> **Note:** When testing the program inside the repository (without installing it yet), it is necessary to load the correct GSettings by using the `GSETTINGS_SCHEMA_DIR` environment variable:
+> ```bash
+> GSETTINGS_SCHEMA_DIR=$(pwd)/schema build/sunrise-siren-studio
+> ```
+> Note that this command assumes you are in the `SunriseSirenStudio` directory.
+
 Congratulations, Sunrise Siren Studio is up and running now!
