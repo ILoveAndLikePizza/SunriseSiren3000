@@ -24,7 +24,7 @@ gchar* str_escape(gchar* input, gchar to_escape) {
     return escaped;
 }
 
-gchar* request(gchar* method, gchar* url, gchar* username, gchar* password,  gchar* post_data) {
+gchar* request(gchar* method, gchar* url, gchar* username, gchar* password, gchar* post_data) {
     CURL *curl = curl_easy_init();
     if (!curl) return "Error while initializing CURL";
 
@@ -35,10 +35,13 @@ gchar* request(gchar* method, gchar* url, gchar* username, gchar* password,  gch
     if (!response_buffer) return NULL;
 
     curl_easy_setopt(curl, CURLOPT_URL, url);
-    curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, method);
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data);
     curl_easy_setopt(curl, CURLOPT_USERPWD, userpwd);
-    curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
+    curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, method);
+    if (method == "POST") {
+        curl_easy_setopt(curl, CURLOPT_POST, 1L);
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data);
+    } else curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
+
     curl_easy_setopt(curl, CURLOPT_TIMEOUT, 12L);
     curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 8L);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_memory_callback);

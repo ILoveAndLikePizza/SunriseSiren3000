@@ -53,17 +53,29 @@ static void pick_color(GtkWidget *widget, gpointer user_data) {
     gtk_widget_destroy(dialog);
 }
 
+static void validate_alarm_time_sensitivity(GtkWidget *widget, gpointer user_data) {
+    gint index = user_data;
+    g_print("am %i at %i", gtk_switch_get_active(widget), index);
+    gtk_widget_set_sensitive(AlarmHour[index], gtk_switch_get_active(widget));
+    gtk_widget_set_sensitive(AlarmMinute[index], gtk_switch_get_active(widget));
+}
+
 // custom mode
-static void validate_custom_entry_sensitive(GtkWidget *widget, gpointer user_data) {
+gint custom_combo_box_get_corresponding_number(GtkComboBox *combo_box) {
     GtkTreeIter iter;
-    gint corresponding_number;
+    gint corresponding_number = 0;
 
-    if (gtk_combo_box_get_active_iter(widget, &iter)) {
-        GtkTreeModel *tree = gtk_combo_box_get_model(widget);
+    if (gtk_combo_box_get_active_iter(combo_box, &iter)) {
+        GtkTreeModel *tree = gtk_combo_box_get_model(combo_box);
         gtk_tree_model_get(tree, &iter, 1, &corresponding_number, -1);
-
-        gtk_widget_set_sensitive(user_data, (corresponding_number == 0));
     } else exit(3);
+
+    return corresponding_number;
+}
+
+static void validate_custom_entry_sensitive(GtkWidget *widget, gpointer user_data) {
+    gint corresponding_number = custom_combo_box_get_corresponding_number(widget);
+    gtk_widget_set_sensitive(user_data, (corresponding_number == 0));
 }
 
 static void set_all_custom_pixels(GtkWidget *widget, gpointer user_data) {
@@ -120,9 +132,9 @@ void get_sensor_values() {
     }
 }
 
+// save buttons
 static void apply_clock_settings(GtkWidget *widget, gpointer user_data) {
-    // step 1 (todo): collect all settings
-
+    // step 1: collect all settings
     glong default_c_number = default_color->red * 255 * (int) pow(256, 2)
         + default_color->green * 255 * (int) pow(256, 1)
         + default_color->blue * 255 * (int) pow(256, 0);
@@ -130,17 +142,93 @@ static void apply_clock_settings(GtkWidget *widget, gpointer user_data) {
         + alarm_color->green * 255 * (int) pow(256, 1)
         + alarm_color->blue * 255 * (int) pow(256, 0);
 
-    // step 2 (todo): make a request string
+    gint alarms_enabled = 0;
+    gint alarm_hours[7];
+    gint alarm_minutes[7];
 
-    // step 3 (todo): yeet a request
+    for (int i=0; i<7; i++) {
+        if (gtk_switch_get_active(AlarmEnable[i])) alarms_enabled += (int) pow(2, i);
+
+        alarm_hours[i] = gtk_spin_button_get_value_as_int(AlarmHour[i]);
+        alarm_minutes[i] = gtk_spin_button_get_value_as_int(AlarmMinute[i]);
+    }
+
+    gchar* alarm_times[28];
+    sprintf(alarm_times,
+        "%02i%02i%02i%02i%02i%02i%02i%02i%02i%02i%02i%02i%02i%02i",
+        alarm_hours[0], alarm_minutes[0],
+        alarm_hours[1], alarm_minutes[1],
+        alarm_hours[2], alarm_minutes[2],
+        alarm_hours[3], alarm_minutes[3],
+        alarm_hours[4], alarm_minutes[4],
+        alarm_hours[5], alarm_minutes[5],
+        alarm_hours[6], alarm_minutes[6]
+    );
+
+    gint leading_zero = gtk_switch_get_active(EnableLeadingZero);
+    gint dst = gtk_switch_get_active(EnableDST);
+    gint return_after = gtk_spin_button_get_value_as_int(ClockReturn) * 1000;
+    gint ldr_min = gtk_spin_button_get_value_as_int(LDRMin);
+    gint ldr_max = gtk_spin_button_get_value_as_int(LDRMax);
+
+    // step 2: make a request string
+    gchar *post_url[PATH_MAX];
+    gchar *post_string[512];
+
+    sprintf(post_url, "http://%s/update", hostname);
+    sprintf(
+        post_string,
+        "default-c=%ld&alarm-c=%ld&alarms-enabled=%i&alarm-times=%s&clock-return=%i&leading-zero=%i&enable-dst=%i&ldr-min=%i&ldr-max=%i",
+        default_c_number, alarm_c_number, alarms_enabled, alarm_times, return_after, leading_zero, dst, ldr_min, ldr_max
+    );
+
+    // step 3: yeet a request
+    gchar *result = request("POST", post_url, username, password, post_string);
+    show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "", result);
 }
 
 static void apply_custom_settings(GtkWidget *widget, gpointer user_data) {
-    // step 1 (todo): collect all settings
+    // step 1: collect all settings
+    glong color_numbers[4];
+    gint custom_digits[4];
 
-    // step 2 (todo): make a request string
+    for (int i=0; i<4; i++) {
+        color_numbers[i] = custom_colors[i]->red * 255 * (int) pow(256, 2)
+            + custom_colors[i]->green * 255 * (int) pow(256, 1)
+            + custom_colors[i]->blue * 255 * (int) pow(256, 0);
 
-    // step 3 (todo): yeet a request
+        gint combo_box_number = custom_combo_box_get_corresponding_number(CustomDigit[i]);
+        custom_digits[i] = (combo_box_number == 0) ? atoi(gtk_entry_get_text(CustomDigitEntry[i])) : combo_box_number;
+    }
+    
+    glong color_colon = custom_colors[4]->red * 255 * (int) pow(256, 2)
+        + custom_colors[4]->green * 255 * (int) pow(256, 1)
+        + custom_colors[4]->blue * 255 * (int) pow(256, 0);
+
+    // step 2: make a request string
+    gchar *segment_strings[4][64];
+    gchar *post_url[PATH_MAX];
+    gchar *post_string[512];
+
+    sprintf(post_url, "http://%s/custom", hostname);
+    for (int i=0; i<4; i++) sprintf(
+        segment_strings[i],
+        "segment-%i=%i&color-%i=%ld",
+        i, custom_digits[i], i, color_numbers[i]
+    );
+    sprintf(
+        post_string,
+        "%s&%s&%s&%s&color-colon=%ld",
+        segment_strings[0],
+        segment_strings[1],
+        segment_strings[2],
+        segment_strings[3],
+        color_colon
+    );
+
+    // step 3: yeet a request
+    gchar *result = request("POST", post_url, username, password, post_string);
+    show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "", result);
 }
 
 // ConnectionWindow

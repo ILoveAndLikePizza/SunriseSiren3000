@@ -25,7 +25,9 @@ GSettings *credentials;
 
 GdkRGBA *default_color;
 GdkRGBA *alarm_color;
-GdkRGBA *custom_colors[5];
+GdkRGBA *custom_colors[5]; // 0-3 are digits, 4 is colon
+
+GtkStack *MainStack;
 
 // MainWindow
 GtkWindow *MainWindow;
@@ -91,8 +93,7 @@ GtkButton *ReconfigureAfterError;
 
 enum TargetWindow;
 
-void quit();
-void reboot();
+void do_absolutely_nothing() {};
 
 static void onActivate(GtkApplication *app, gpointer user_data);
 

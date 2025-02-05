@@ -52,6 +52,11 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
     if (target == WINDOW_MAIN) {
         // MainWindow
         MainWindow = gtk_builder_get_object(builder, "MainWindow");
+        g_signal_connect(MainWindow, "key-press-event", main_window_key_press, NULL);
+        g_signal_connect(MainWindow, "key-release-event", main_window_key_release, NULL);
+
+        MainStack = gtk_builder_get_object(builder, "MainStack");
+
         // Clock settings tab
         // Colors
         DefaultColor = gtk_builder_get_object(builder, "DefaultColor");
@@ -97,7 +102,6 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
 
             gchar hour[3] = {alarm_times[i * 4], alarm_times[i * 4 + 1], '\0'};
             gchar minute[3] = {alarm_times[i * 4 + 2], alarm_times[i * 4 + 3], '\0'};
-            gtk_switch_set_active(AlarmEnable[i], (alarms_enabled & (gint) pow(2, i)) > 0);
 
             gtk_spin_button_set_adjustment(AlarmHour[i], gtk_adjustment_new(atoi(hour), 0, 24, 1, 1, 1));
             gtk_spin_button_set_numeric(AlarmHour[i], TRUE);
@@ -106,6 +110,12 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
             gtk_spin_button_set_adjustment(AlarmMinute[i], gtk_adjustment_new(atoi(minute), 0, 60, 1, 1, 1));
             gtk_spin_button_set_numeric(AlarmMinute[i], TRUE);
             gtk_spin_button_set_wrap(AlarmMinute[i], TRUE);
+
+            gboolean is_enabled = (alarms_enabled & (gint) pow(2, i)) > 0;
+
+            gtk_switch_set_active(AlarmEnable[i], is_enabled);
+            validate_alarm_time_sensitivity(AlarmEnable[i], i);
+            g_signal_connect(AlarmEnable[i], "state-set", validate_alarm_time_sensitivity, i);
         }
 
         ClockUpdate = gtk_builder_get_object(builder, "ClockUpdate");
@@ -154,16 +164,16 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
             g_signal_connect(CustomDigit[i], "changed", validate_custom_entry_sensitive, CustomDigitEntry[i]);
         }
 
-        // colon (index 2 of custom_colors)
+        // colon (index 4 of custom_colors)
         CustomColor_Colon = gtk_builder_get_object(builder, "CustomColor-Colon");
-        custom_colors[2] = g_new(GdkRGBA, 1);
-        custom_colors[2]->red = default_color->red;
-        custom_colors[2]->green = default_color->green;
-        custom_colors[2]->blue = default_color->blue;
-        custom_colors[2]->alpha = 1;
+        custom_colors[4] = g_new(GdkRGBA, 1);
+        custom_colors[4]->red = default_color->red;
+        custom_colors[4]->green = default_color->green;
+        custom_colors[4]->blue = default_color->blue;
+        custom_colors[4]->alpha = 1;
 
-        gtk_widget_override_background_color(CustomColor_Colon, GTK_STATE_NORMAL, custom_colors[2]);
-        g_signal_connect(CustomColor_Colon, "clicked", pick_color, custom_colors[2]);
+        gtk_widget_override_background_color(CustomColor_Colon, GTK_STATE_NORMAL, custom_colors[4]);
+        g_signal_connect(CustomColor_Colon, "clicked", pick_color, custom_colors[4]);
 
         for (int i=0; i<21; i++) {
             gchar* pixel_id[22];
@@ -209,6 +219,7 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         gtk_widget_show_all(MainWindow);
     } else if (target == WINDOW_CONNECTION) {
         ConnectionWindow = gtk_builder_get_object(builder, "ConnectionWindow");
+        g_signal_connect(ConnectionWindow, "key-press-event", connection_window_key_press, NULL);
 
         ConnectHostname = gtk_builder_get_object(builder, "ConnectHostname");
         ConnectUsername = gtk_builder_get_object(builder, "ConnectUsername");

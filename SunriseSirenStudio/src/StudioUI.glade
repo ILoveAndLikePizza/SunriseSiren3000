@@ -413,7 +413,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-start">7</property>
-                <property name="stack">Stack</property>
+                <property name="stack">MainStack</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -432,7 +432,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkStack" id="Stack">
+          <object class="GtkStack" id="MainStack">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="transition-duration">250</property>
@@ -1476,7 +1476,7 @@
                 </child>
               </object>
               <packing>
-                <property name="name">page0</property>
+                <property name="name">ClockSettings</property>
                 <property name="title" translatable="yes">Clock settings</property>
               </packing>
             </child>
@@ -2220,13 +2220,14 @@
                 </child>
               </object>
               <packing>
-                <property name="name">page1</property>
+                <property name="name">CustomMode</property>
                 <property name="title" translatable="yes">Custom mode</property>
                 <property name="position">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkBox">
+                <property name="name">Miscellaneous</property>
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-start">50</property>
@@ -2461,7 +2462,7 @@
                 </child>
               </object>
               <packing>
-                <property name="name">page2</property>
+                <property name="name">Miscellaneous</property>
                 <property name="title" translatable="yes">Miscellaneous</property>
                 <property name="position">2</property>
               </packing>
