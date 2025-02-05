@@ -176,4 +176,27 @@ static void create_connection(GtkWidget *widget, gpointer user_data) {
     }
 }
 
+// key event handlers
+gboolean ctrl_pressed = FALSE;
+
+static void main_window_key_press(GtkWidget *widget, GdkEventKey *e, gpointer data) {
+    if (e->keyval == 65507) ctrl_pressed = TRUE;
+    else if (e->keyval == 115) {
+        gchar* visible_tab = gtk_stack_get_visible_child_name(MainStack);
+
+        if (strstr(visible_tab, "ClockSettings")) apply_clock_settings(widget, data);
+        else if (strstr(visible_tab, "CustomMode")) apply_custom_settings(widget, data);
+    } else do_absolutely_nothing(); // idk WHY I have to do this, but I have to
+}
+
+static void main_window_key_release(GtkWidget *widget, GdkEventKey *e, gpointer data) {
+    if (e->keyval == 65507) ctrl_pressed = FALSE;
+    else do_absolutely_nothing();
+}
+
+static void connection_window_key_press(GtkWidget *widget, GdkEventKey *e, gpointer data) {
+    if (e->keyval == 65293) create_connection(widget, data);
+    else do_absolutely_nothing();
+}
+
 #endif
