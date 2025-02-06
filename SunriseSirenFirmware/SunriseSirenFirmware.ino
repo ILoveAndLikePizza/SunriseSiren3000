@@ -118,7 +118,7 @@ void setup() {
       output.concat(",\n    \"max\": ");
       output.concat(ldr.maxValue);
       output.concat("\n  }\n}");
-      
+
       server.send(200, "application/json", output);
     });
     server.on("/sensors", HTTP_GET, []() {

@@ -18,7 +18,7 @@ class SunriseSiren3000SHT21 {
       this->temperature = this->sht.getTemperature();
       this->humidity = this->sht.getHumidity();
     }
-  
+
   public:
     int rawTemperature;
     int rawHumidity;

@@ -203,7 +203,7 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         LDRReading = gtk_builder_get_object(builder, "LDRReading");
         SHT21TemperatureReading = gtk_builder_get_object(builder, "SHT21TemperatureReading");
         SHT21HumidityReading = gtk_builder_get_object(builder, "SHT21HumidityReading");
-        
+
         SensorRefresh = gtk_builder_get_object(builder, "SensorRefresh");
         g_signal_connect(SensorRefresh, "clicked", get_sensor_values, NULL);
         get_sensor_values();

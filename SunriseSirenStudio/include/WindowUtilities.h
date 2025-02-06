@@ -99,7 +99,7 @@ static void set_custom_digit(GtkWidget *widget, gpointer user_data) {
 
     sprintf(entry_text, "%i", custom_number);
     gtk_entry_set_text(CustomDigitEntry[target_index], entry_text);
-    
+
     gint combo_box_item_count = gtk_tree_model_iter_n_children(gtk_combo_box_get_model(CustomDigit[target_index]), NULL);
     gtk_combo_box_set_active(CustomDigit[target_index], combo_box_item_count - 1);
 }
@@ -205,7 +205,7 @@ static void apply_custom_settings(GtkWidget *widget, gpointer user_data) {
         gint combo_box_number = custom_combo_box_get_corresponding_number(CustomDigit[i]);
         custom_digits[i] = (combo_box_number == 0) ? atoi(gtk_entry_get_text(CustomDigitEntry[i])) : combo_box_number;
     }
-    
+
     glong color_colon = custom_colors[4]->red * 255 * (int) pow(256, 2)
         + custom_colors[4]->green * 255 * (int) pow(256, 1)
         + custom_colors[4]->blue * 255 * (int) pow(256, 0);
@@ -251,7 +251,7 @@ static void create_connection(GtkWidget *widget, gpointer user_data) {
     sprintf(url, "http://%s/connect", hostname);
 
     gchar* req = request("GET", url, username, password, "");
-    
+
     if (strstr(req, VALIDATION_STRING)) {
         // authentication successful, save and continue
 
