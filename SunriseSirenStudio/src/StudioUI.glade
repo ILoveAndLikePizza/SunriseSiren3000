@@ -478,6 +478,7 @@
     <property name="height-request">700</property>
     <property name="can-focus">False</property>
     <property name="title" translatable="yes">Sunrise Siren Studio</property>
+    <property name="icon-name">sunrise-siren-studio</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -2189,6 +2190,7 @@
                     <child>
                       <object class="GtkButton" id="CustomDigitEnableAll">
                         <property name="label" translatable="yes">Enable all</property>
+                        <property name="width-request">100</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
@@ -2201,12 +2203,13 @@
                     <child>
                       <object class="GtkButton" id="CustomDigitDisableAll">
                         <property name="label" translatable="yes">Disable all</property>
+                        <property name="width-request">100</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
                       </object>
                       <packing>
-                        <property name="x">470</property>
+                        <property name="x">475</property>
                         <property name="y">320</property>
                       </packing>
                     </child>
@@ -2278,12 +2281,13 @@
                     <child>
                       <object class="GtkButton" id="CustomDigitInvertAll">
                         <property name="label" translatable="yes">Invert all</property>
+                        <property name="width-request">100</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
                       </object>
                       <packing>
-                        <property name="x">580</property>
+                        <property name="x">590</property>
                         <property name="y">320</property>
                       </packing>
                     </child>

@@ -240,7 +240,7 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         g_signal_connect(CloseAfterError, "clicked", quit, NULL);
 
         RetryAfterError = gtk_builder_get_object(builder, "RetryAfterError");
-        g_signal_connect(RetryAfterError, "clicked", reboot, NULL);
+        g_signal_connect(RetryAfterError, "clicked", reboot_program, NULL);
 
         ReconfigureAfterError = gtk_builder_get_object(builder, "ReconfigureAfterError");
         g_signal_connect(ReconfigureAfterError, "clicked", reconfigure, NULL);

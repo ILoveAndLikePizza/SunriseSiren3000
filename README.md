@@ -31,9 +31,10 @@ This repository consists of two relevant parts of the clock:
 6. Go to **Tools** > **Board** and ensure that it is set to "**ESP32 Dev Module**";
 7. Click the Upload button.
 
-Congratulations, the Sunrise Siren 3000 firmware has been flashed successfully!
+### Congratulations, the Sunrise Siren 3000 firmware has been flashed successfully!
+<br>
 
-## Sunrise Siren Studio setup
+## Sunrise Siren Studio installation
 1. Ensure that the required libraries are installed. On Debian(-based) systems, those can be installed by running:
     ```bash
     sudo apt install libgtk-3-dev libcurl4-openssl-dev libjson-c-dev
@@ -47,17 +48,26 @@ Congratulations, the Sunrise Siren 3000 firmware has been flashed successfully!
     ```bash
     make
     ```
-5. Optionally, install the program by running:
+5.  If you want to install the program right away, skip to the next step. If you want to test the program first (inside the repository), it is necessary to compile the GSettings schema first, and refer to it by using the `GSETTINGS_SCHEMA_DIR` environment variable when executing the binary:
+    ```bash
+    make gschema
+    GSETTINGS_SCHEMA_DIR=$(pwd)/schema build/sunrise-siren-studio
+    ```
+    > Note that these commands assume you are in the `SunriseSirenStudio` directory.
+6. To install the program on your computer, run:
     ```bash
     sudo make install
     ```
-6. Launch the program and follow the instructions given there.
 
-> **Note:** When testing the program inside the repository (without installing it yet), it is necessary to compile and load the correct GSettings by using the `GSETTINGS_SCHEMA_DIR` environment variable:
-> ```bash
-> make gschema
-> GSETTINGS_SCHEMA_DIR=$(pwd)/schema build/sunrise-siren-studio
-> ```
-> Note that this command assumes you are in the `SunriseSirenStudio` directory.
+### Congratulations, Sunrise Siren Studio is up and running now!
+<br>
 
-Congratulations, Sunrise Siren Studio is up and running now!
+## Sunrise Siren Studio uninstallation
+1. Simply run:
+    ```bash
+    sudo make uninstall
+    ```
+2. Optionally, you can remove all minified and compiled files from the repository:
+    ```bash
+    make clean
+    ```
