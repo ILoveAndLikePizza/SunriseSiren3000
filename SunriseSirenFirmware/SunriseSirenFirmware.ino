@@ -170,6 +170,8 @@ void setup() {
       pref.end();
 
       ntp.setDST(enableDST);
+
+      currentState = CLOCK;
       server.send(200, "text/plain", "Changes have been saved and applied!");
     });
     server.on("/custom", HTTP_POST, []() {
