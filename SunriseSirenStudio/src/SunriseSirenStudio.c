@@ -188,6 +188,9 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         CustomDigitDisableAll = gtk_builder_get_object(builder, "CustomDigitDisableAll");
         g_signal_connect(CustomDigitDisableAll, "clicked", set_all_custom_pixels, FALSE);
 
+        CustomDigitInvertAll = gtk_builder_get_object(builder, "CustomDigitInvertAll");
+        g_signal_connect(CustomDigitInvertAll, "clicked", invert_all_custom_pixels, FALSE);
+
         CustomDigitApplyIndex = gtk_builder_get_object(builder, "CustomDigitApplyIndex");
         CustomDigitApply = gtk_builder_get_object(builder, "CustomDigitApply");
         g_signal_connect(CustomDigitApply, "clicked", set_custom_digit, NULL);

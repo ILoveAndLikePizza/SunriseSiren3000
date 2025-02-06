@@ -231,7 +231,7 @@
       </row>
       <row>
         <col id="0" translatable="yes">1</col>
-        <col id="1">28679</col>
+        <col id="1">1835456</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -239,11 +239,11 @@
       </row>
       <row>
         <col id="0" translatable="yes">3</col>
-        <col id="1">261695</col>
+        <col id="1">2068472</col>
       </row>
       <row>
         <col id="0" translatable="yes">4</col>
-        <col id="1">32711</col>
+        <col id="1">1867712</col>
       </row>
       <row>
         <col id="0" translatable="yes">5</col>
@@ -251,11 +251,11 @@
       </row>
       <row>
         <col id="0" translatable="yes">6</col>
-        <col id="1">2097144</col>
+        <col id="1">262143</col>
       </row>
       <row>
         <col id="0" translatable="yes">7</col>
-        <col id="1">28735</col>
+        <col id="1">2064832</col>
       </row>
       <row>
         <col id="0" translatable="yes">8</col>
@@ -263,7 +263,87 @@
       </row>
       <row>
         <col id="0" translatable="yes">9</col>
-        <col id="1">262143</col>
+        <col id="1">2097144</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">A</col>
+        <col id="1">2097095</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">b</col>
+        <col id="1">32767</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">C</col>
+        <col id="1">258111</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">d</col>
+        <col id="1">1839103</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">E</col>
+        <col id="1">261695</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">F</col>
+        <col id="1">261639</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">G</col>
+        <col id="1">258559</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">H</col>
+        <col id="1">1867719</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">J</col>
+        <col id="1">1835512</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">L</col>
+        <col id="1">28735</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">n</col>
+        <col id="1">4039</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">o</col>
+        <col id="1">4095</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">P</col>
+        <col id="1">2096647</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">r</col>
+        <col id="1">3591</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">t</col>
+        <col id="1">32319</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">u</col>
+        <col id="1">511</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">y</col>
+        <col id="1">1867768</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">-</col>
+        <col id="1">3584</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">||</col>
+        <col id="1">1864135</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">≡</col>
+        <col id="1">233016</col>
       </row>
       <row>
         <col id="0" translatable="yes">Custom...</col>
@@ -1760,23 +1840,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="CustomUpdate">
-                    <property name="label" translatable="yes">Update and enable custom mode</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <style>
-                      <class name="suggested-action"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="padding">12</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkFixed">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -2132,7 +2195,7 @@
                       </object>
                       <packing>
                         <property name="x">360</property>
-                        <property name="y">300</property>
+                        <property name="y">320</property>
                       </packing>
                     </child>
                     <child>
@@ -2144,7 +2207,7 @@
                       </object>
                       <packing>
                         <property name="x">470</property>
-                        <property name="y">300</property>
+                        <property name="y">320</property>
                       </packing>
                     </child>
                     <child>
@@ -2212,10 +2275,39 @@
                         <property name="y">145</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkButton" id="CustomDigitInvertAll">
+                        <property name="label" translatable="yes">Invert all</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">580</property>
+                        <property name="y">320</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="CustomUpdate">
+                    <property name="label" translatable="yes">Update and enable custom mode</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <style>
+                      <class name="suggested-action"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">12</property>
                     <property name="position">2</property>
                   </packing>
                 </child>

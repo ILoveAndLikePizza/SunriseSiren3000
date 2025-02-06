@@ -65,6 +65,7 @@ GtkEntry *CustomDigitApplyIndex;
 GtkButton *CustomDigitApply;
 GtkButton *CustomDigitEnableAll;
 GtkButton *CustomDigitDisableAll;
+GtkButton *CustomDigitInvertAll;
 
 // Miscellaneous tab
 // Sensor information

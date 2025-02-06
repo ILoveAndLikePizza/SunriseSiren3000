@@ -83,6 +83,11 @@ static void set_all_custom_pixels(GtkWidget *widget, gpointer user_data) {
         gtk_toggle_button_set_active(CustomSegmentNumber[i], user_data);
 }
 
+static void invert_all_custom_pixels(GtkWidget *widget, gpointer user_data) {
+    for (int i=0; i<21; i++)
+        gtk_toggle_button_set_active(CustomSegmentNumber[i], !gtk_toggle_button_get_active(CustomSegmentNumber[i]));
+}
+
 static void set_custom_digit(GtkWidget *widget, gpointer user_data) {
     gint target_index = gtk_spin_button_get_value_as_int(CustomDigitApplyIndex) - 1;
     gint custom_number = 0;
