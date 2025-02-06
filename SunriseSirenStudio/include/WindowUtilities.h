@@ -55,7 +55,7 @@ static void pick_color(GtkWidget *widget, gpointer user_data) {
 
 static void validate_alarm_time_sensitivity(GtkWidget *widget, gpointer user_data) {
     gint index = user_data;
-    g_print("am %i at %i", gtk_switch_get_active(widget), index);
+
     gtk_widget_set_sensitive(AlarmHour[index], gtk_switch_get_active(widget));
     gtk_widget_set_sensitive(AlarmMinute[index], gtk_switch_get_active(widget));
 }

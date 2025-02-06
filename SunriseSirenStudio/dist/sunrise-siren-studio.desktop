@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Sunrise Siren Studio
+Comment=Control program for Sunrise Siren 3000
+Exec=/usr/bin/sunrise-siren-studio %F
+Terminal=false
+Type=Application
+Keywords=sunrise;siren;studio;alarm;clock;controller;
+Icon=sunrise-siren-studio
+Categories=GNOME;GTK;Utility;Clock;

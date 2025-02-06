@@ -15,7 +15,7 @@ enum TargetWindow {
 
 static void onActivate(GtkApplication *app, gpointer user_data) {
     curl_global_init(CURL_GLOBAL_ALL);
-    credentials = g_settings_new("org.sunrise-siren-studio.credentials");
+    credentials = g_settings_new("org.x.sunrise-siren-studio.credentials");
 
     enum TargetWindow target;
 
