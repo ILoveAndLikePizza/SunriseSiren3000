@@ -46,18 +46,6 @@ class SunriseSiren3000Lighting {
       FastLED.show();
     }
 
-    void apply(int position, byte segments[7], CRGB color) {
-      for (int i=0; i<7; i++) { // i = one out of seven segments per digit
-        int start = startPositions[position] + i * 3;
-
-        for (int j=0; j<3; j++) { // j = one out of three pixels per segment
-          byte pixelBinary = pow(2, j);
-          byte arrayBinary = segments[i];
-          this->leds[start + j] = ((pixelBinary & arrayBinary) > 0) ? color : CRGB::Black;
-        }
-      }
-    }
-
     void showTime(String time, CRGB color, bool leadingZero = true) {
       for (int i=0; i<4; i++) {
         int output = (time.equals("9999")) ? DIGIT_HYPHEN : String(time[i]).toInt(); // replace disabled alarms in preview with --:--
@@ -82,7 +70,22 @@ class SunriseSiren3000Lighting {
       byte segmentList[7];
       for (int i=0; i<7; i++) segmentList[i] = this->numbers[number][i];
 
-      this->apply(position, segmentList, color);
+      for (int i=0; i<7; i++) { // i = one out of seven segments per digit
+        int start = startPositions[position] + i * 3;
+
+        for (int j=0; j<3; j++) { // j = one out of three pixels per segment
+          byte pixelBinary = pow(2, j);
+          byte arrayBinary = segmentList[i];
+          this->leds[start + j] = ((pixelBinary & arrayBinary) > 0) ? color : CRGB::Black;
+        }
+      }
+    }
+
+    void showCustomDigit(int position, int customValue, CRGB color) {
+      for (int i=0; i<21; i++) {
+        bool pixelEnabled = (customValue & (int) pow(2, i)) > 0;
+        this->leds[startPositions[position] + i] = pixelEnabled ? color : CRGB::Black;
+      }
     }
 
     void setColonPoint(CRGB color) {

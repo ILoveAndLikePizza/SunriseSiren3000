@@ -41,7 +41,7 @@ bool enableDST;
 int alarmsEnabled;
 String alarmTimes;
 
-byte customSegments[4][7];
+int customSegments[4];
 CRGB customColors[4];
 CRGB customColonPoint;
 
@@ -178,9 +178,7 @@ void setup() {
       if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
 
       for (int i=0; i<4; i++) {
-        if (server.hasArg("segment-" + String(i))) {
-          for (int j=0; j<7; j++) customSegments[i][j] = String(server.arg("segment-" + String(i)).charAt(j)).toInt();
-        }
+        if (server.hasArg("segment-" + String(i))) customSegments[i] = server.arg("segment-" + String(i)).toInt();
         if (server.hasArg("color-" + String(i))) customColors[i] = CRGB(server.arg("color-" + String(i)).toInt());
       }
       if (server.hasArg("color-colon")) customColonPoint = CRGB(server.arg("color-colon").toInt());
@@ -272,7 +270,7 @@ void loop() {
     lights.showTime(alarms[alarmPreviewIndex].time, lights.defaultColor, leadingZero);
     lights.setColonPoint((millis() % 600 < 300) ? lights.defaultColor : CRGB::Black);
   } else if (currentState == CUSTOM) {
-    for (int i=0; i<4; i++) lights.apply(i, customSegments[i], customColors[i]);
+    for (int i=0; i<4; i++) lights.showCustomDigit(i, customSegments[i], customColors[i]);
 
     lights.setColonPoint(customColonPoint);
   }
