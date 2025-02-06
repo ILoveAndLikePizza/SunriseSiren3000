@@ -53,11 +53,11 @@ static void pick_color(GtkWidget *widget, gpointer user_data) {
     gtk_widget_destroy(dialog);
 }
 
-static void validate_alarm_time_sensitivity(GtkWidget *widget, gpointer user_data) {
+static void validate_alarm_time_sensitivity(GtkWidget *widget, gboolean state, gpointer user_data) {
     gint index = user_data;
 
-    gtk_widget_set_sensitive(AlarmHour[index], gtk_switch_get_active(widget));
-    gtk_widget_set_sensitive(AlarmMinute[index], gtk_switch_get_active(widget));
+    gtk_widget_set_sensitive(AlarmHour[index], state);
+    gtk_widget_set_sensitive(AlarmMinute[index], state);
 }
 
 // custom mode

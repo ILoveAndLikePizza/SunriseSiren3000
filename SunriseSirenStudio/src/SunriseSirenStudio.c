@@ -114,7 +114,7 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
             gboolean is_enabled = (alarms_enabled & (gint) pow(2, i)) > 0;
 
             gtk_switch_set_active(AlarmEnable[i], is_enabled);
-            validate_alarm_time_sensitivity(AlarmEnable[i], i);
+            validate_alarm_time_sensitivity(AlarmEnable[i], is_enabled, i);
             g_signal_connect(AlarmEnable[i], "state-set", validate_alarm_time_sensitivity, i);
         }
 
