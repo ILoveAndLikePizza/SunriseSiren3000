@@ -20,6 +20,7 @@ void show_about_dialog() {
         "program-name", "Sunrise Siren Studio",
         "title", "About Sunrise Siren Studio",
         "version", "v1.0.0",
+        "logo-icon-name", "sunrise-siren-studio",
         "license-type", GTK_LICENSE_GPL_3_0,
         "copyright", "© 2025 ngkon. All rights reserved.",
         "authors", credits,
