@@ -473,6 +473,12 @@
     <property name="step-increment">1</property>
     <property name="page-increment">100</property>
   </object>
+  <object class="GtkAdjustment" id="SnoozeIntervalAdjustment">
+    <property name="lower">10</property>
+    <property name="upper">900</property>
+    <property name="step-increment">5</property>
+    <property name="page-increment">60</property>
+  </object>
   <object class="GtkWindow" id="MainWindow">
     <property name="width-request">725</property>
     <property name="height-request">700</property>
@@ -1393,6 +1399,63 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="margin-start">8</property>
+                                <property name="label" translatable="yes">Snooze interval</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="SnoozeInterval">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="halign">end</property>
+                                <property name="hexpand">True</property>
+                                <property name="adjustment">SnoozeIntervalAdjustment</property>
+                                <property name="climb-rate">1</property>
+                                <property name="snap-to-ticks">True</property>
+                                <property name="numeric">True</property>
+                                <property name="wrap">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">end</property>
+                                <property name="margin-end">8</property>
+                                <property name="label" translatable="yes"> seconds</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBoxRow">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="margin-start">8</property>
                                 <property name="label" translatable="yes">Always return to clock after</property>
                               </object>
                               <packing>
@@ -1451,7 +1514,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="margin-start">8</property>
-                                <property name="label" translatable="yes">LDR minimal value</property>
+                                <property name="label" translatable="yes">LDR mapping boundaries</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -1460,12 +1523,24 @@
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">end</property>
+                                <property name="hexpand">True</property>
+                                <property name="label" translatable="yes">Lower: </property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkSpinButton" id="LDRMin">
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="halign">end</property>
-                                <property name="margin-end">8</property>
-                                <property name="hexpand">True</property>
                                 <property name="text" translatable="yes">5</property>
                                 <property name="input-purpose">digits</property>
                                 <property name="adjustment">LDRMinAdjustment</property>
@@ -1478,32 +1553,20 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">1</property>
+                                <property name="position">2</property>
                               </packing>
                             </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBoxRow">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
                             <child>
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="margin-start">8</property>
-                                <property name="label" translatable="yes">LDR maximal value</property>
+                                <property name="margin-start">16</property>
+                                <property name="label" translatable="yes">Upper: </property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">0</property>
+                                <property name="position">3</property>
                               </packing>
                             </child>
                             <child>
@@ -1512,7 +1575,6 @@
                                 <property name="can-focus">True</property>
                                 <property name="halign">end</property>
                                 <property name="margin-end">8</property>
-                                <property name="hexpand">True</property>
                                 <property name="text" translatable="yes">5</property>
                                 <property name="input-purpose">digits</property>
                                 <property name="adjustment">LDRMaxAdjustment</property>
@@ -1525,7 +1587,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">1</property>
+                                <property name="position">4</property>
                               </packing>
                             </child>
                           </object>

@@ -172,6 +172,7 @@ static void apply_clock_settings(GtkWidget *widget, gpointer user_data) {
 
     gint leading_zero = gtk_switch_get_active(EnableLeadingZero);
     gint dst = gtk_switch_get_active(EnableDST);
+    gint snooze_t = gtk_spin_button_get_value_as_int(SnoozeInterval) * 1000;
     gint return_after = gtk_spin_button_get_value_as_int(ClockReturn) * 1000;
     gint ldr_min = gtk_spin_button_get_value_as_int(LDRMin);
     gint ldr_max = gtk_spin_button_get_value_as_int(LDRMax);
@@ -183,13 +184,13 @@ static void apply_clock_settings(GtkWidget *widget, gpointer user_data) {
     sprintf(post_url, "http://%s/update", hostname);
     sprintf(
         post_string,
-        "default-c=%ld&alarm-c=%ld&alarms-enabled=%i&alarm-times=%s&clock-return=%i&leading-zero=%i&enable-dst=%i&ldr-min=%i&ldr-max=%i",
-        default_c_number, alarm_c_number, alarms_enabled, alarm_times, return_after, leading_zero, dst, ldr_min, ldr_max
+        "default-c=%ld&alarm-c=%ld&alarms-enabled=%i&alarm-times=%s&leading-zero=%i&enable-dst=%i&snooze-t=%i&clock-return=%i&ldr-min=%i&ldr-max=%i",
+        default_c_number, alarm_c_number, alarms_enabled, alarm_times, leading_zero, dst, snooze_t, return_after, ldr_min, ldr_max
     );
 
     // step 3: yeet a request
     gchar *result = request("POST", post_url, username, password, post_string);
-    show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "", result);
+    if (strstr(result, "Done!")) show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Done!", "Changes have been saved and applied!");
 }
 
 static void apply_custom_settings(GtkWidget *widget, gpointer user_data) {
@@ -233,7 +234,7 @@ static void apply_custom_settings(GtkWidget *widget, gpointer user_data) {
 
     // step 3: yeet a request
     gchar *result = request("POST", post_url, username, password, post_string);
-    show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "", result);
+    if (strstr(result, "Done!")) show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Done!", "Custom configuration has been saved and is visible now!");
 }
 
 // ConnectionWindow

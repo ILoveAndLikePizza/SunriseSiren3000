@@ -35,6 +35,7 @@ SunriseSiren3000Alarm alarms[7];
 unsigned long lastStateCycledAt = 0;
 enum State currentState = CLOCK;
 
+unsigned int snoozeInterval;
 unsigned int clockReturn;
 bool leadingZero;
 bool enableDST;
@@ -48,13 +49,14 @@ CRGB customColonPoint;
 void loadSettings() {
   lights.defaultColor = CRGB(pref.getInt("default-c"));
   lights.alarmColor = CRGB(pref.getInt("alarm-c"));
-  ldr.minValue = pref.getInt("ldr-min");
-  ldr.maxValue = pref.getInt("ldr-max");
   clockReturn = pref.getInt("clock-return");
   leadingZero = pref.getBool("leading-zero");
   enableDST = pref.getBool("enable-dst");
   alarmsEnabled = pref.getInt("alarms-enabled");
   alarmTimes = pref.getString("alarm-times");
+  snoozeInterval = pref.getInt("snooze-t");
+  ldr.minValue = pref.getInt("ldr-min");
+  ldr.maxValue = pref.getInt("ldr-max");
 }
 
 void updateAlarms() {
@@ -113,6 +115,8 @@ void setup() {
       output.concat(enableDST ? "true" : "false");
       output.concat(",\n  \"clockReturn\": ");
       output.concat(clockReturn / 1000);
+      output.concat(",\n  \"snoozeInterval\": ");
+      output.concat(snoozeInterval / 1000);
       output.concat(",\n  \"ldr\": {\n    \"min\": ");
       output.concat(ldr.minValue);
       output.concat(",\n    \"max\": ");
@@ -148,11 +152,6 @@ void setup() {
       if (server.hasArg("alarm-c") && server.arg("alarm-c").toInt() != pref.getInt("alarm-c"))
         pref.putInt("alarm-c", server.arg("alarm-c").toInt());
 
-      if (server.hasArg("ldr-min") && server.arg("ldr-min").toInt() != pref.getInt("ldr-min"))
-        pref.putInt("ldr-min", server.arg("ldr-min").toInt());
-      if (server.hasArg("ldr-max") && server.arg("ldr-max").toInt() != pref.getInt("ldr-max"))
-        pref.putInt("ldr-max", server.arg("ldr-max").toInt());
-
       if (server.hasArg("clock-return") && server.arg("clock-return").toInt() != pref.getInt("clock-return"))
         pref.putInt("clock-return", server.arg("clock-return").toInt());
       if (server.hasArg("leading-zero") && server.arg("leading-zero").toInt() != pref.getBool("leading-zero"))
@@ -165,6 +164,13 @@ void setup() {
       if (server.hasArg("alarm-times") && !server.arg("alarm-times").equals(pref.getString("alarm-times")))
         pref.putString("alarm-times", server.arg("alarm-times"));
 
+      if (server.hasArg("snooze-t") && server.arg("snooze-t").toInt() != pref.getInt("snooze-t"))
+        pref.putInt("snooze-t", server.arg("snooze-t").toInt());
+      if (server.hasArg("ldr-min") && server.arg("ldr-min").toInt() != pref.getInt("ldr-min"))
+        pref.putInt("ldr-min", server.arg("ldr-min").toInt());
+      if (server.hasArg("ldr-max") && server.arg("ldr-max").toInt() != pref.getInt("ldr-max"))
+        pref.putInt("ldr-max", server.arg("ldr-max").toInt());
+
       loadSettings();
       updateAlarms();
       pref.end();
@@ -172,7 +178,7 @@ void setup() {
       ntp.setDST(enableDST);
 
       currentState = CLOCK;
-      server.send(200, "text/plain", "Changes have been saved and applied!");
+      server.send(200, "text/plain", "Done!");
     });
     server.on("/custom", HTTP_POST, []() {
       if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
@@ -184,7 +190,7 @@ void setup() {
       if (server.hasArg("color-colon")) customColonPoint = CRGB(server.arg("color-colon").toInt());
 
       currentState = CUSTOM;
-      server.send(200, "text/plain", "Custom configuration has been saved and is visible now!");
+      server.send(200, "text/plain", "Done!");
     });
     server.on("/reboot", HTTP_PATCH, []() {
       if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
@@ -208,7 +214,7 @@ void setup() {
     ntp.init();
     sht21.init();
 
-    lights.showTime("9999", lights.defaultColor);
+    lights.showTime("----", lights.defaultColor);
     lights.update(MAX_BRIGHTNESS);
 
     while (!ntp.isTimeSet()) {
@@ -231,17 +237,21 @@ void loop() {
   String t = ntp.getTime();
   int d = ntp.getDay();
 
-  if (alarms[d].update(t)) currentState = CLOCK;
+  if (alarms[d].update(t, snoozeInterval)) currentState = CLOCK;
 
   buzzer.enabled = alarms[d].activity;
   buzzer.update();
 
   if (button.released) {
-    if (alarms[d].tripping) alarms[d].stop();
+    if (alarms[d].tripping) alarms[d].snooze();
     else cycleState();
+
   } else if (button.held) {
-    lastStateCycledAt = millis();
-    currentState = ALARM_PREVIEW;
+    if (alarms[d].tripping || alarms[d].snoozed) alarms[d].stop();
+    else {
+      lastStateCycledAt = millis();
+      currentState = ALARM_PREVIEW;
+    }
   }
 
   if (millis() - lastStateCycledAt >= clockReturn && !(currentState == CLOCK || currentState == CUSTOM))
@@ -249,8 +259,10 @@ void loop() {
 
   if (currentState == CLOCK) {
     CRGB clockColor = (alarms[d].activity) ? lights.alarmColor : lights.defaultColor;
+    CRGB colonColor = (!alarms[d].snoozed || millis() % 1000 < 750) ? clockColor : CRGB::Black;
+
     lights.showTime(t, clockColor, leadingZero);
-    lights.setColonPoint(clockColor);
+    lights.setColonPoint(colonColor);
   } else if (currentState == TEMPERATURE) {
     lights.showSingleDigit(0, (int)sht21.temperature / 10 % 10, lights.defaultColor);
     lights.showSingleDigit(1, (int)sht21.temperature % 10, lights.defaultColor);
@@ -266,9 +278,11 @@ void loop() {
   } else if (currentState == ALARM_PREVIEW) {
     bool alarmAlreadyTrippedToday = (t >= alarms[d].time);
     const int alarmPreviewIndex = alarmAlreadyTrippedToday ? ntp.getNextDay() : d;
+    const int colonFrequency = (alarmPreviewIndex == d) ? 500 : 1200;
+    const String preview = alarms[alarmPreviewIndex].enabled ? alarms[alarmPreviewIndex].time : "----";
 
-    lights.showTime(alarms[alarmPreviewIndex].time, lights.defaultColor, leadingZero);
-    lights.setColonPoint((millis() % 600 < 300) ? lights.defaultColor : CRGB::Black);
+    lights.showTime(preview, lights.defaultColor, leadingZero);
+    lights.setColonPoint((millis() % colonFrequency < colonFrequency / 2) ? lights.defaultColor : CRGB::Black);
   } else if (currentState == CUSTOM) {
     for (int i=0; i<4; i++) lights.showCustomDigit(i, customSegments[i], customColors[i]);
 

@@ -44,6 +44,7 @@ GtkSpinButton *AlarmMinute[7];
 // Advanced
 GtkSwitch *EnableLeadingZero;
 GtkSwitch *EnableDST;
+GtkSpinButton *SnoozeInterval;
 GtkSpinButton *ClockReturn;
 GtkSpinButton *LDRMin;
 GtkSpinButton *LDRMax;

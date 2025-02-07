@@ -128,6 +128,9 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         EnableDST = gtk_builder_get_object(builder, "EnableDST");
         gtk_switch_set_active(EnableDST, json_object_get_boolean(json_object_object_get(clock_status, "enableDST")));
 
+        SnoozeInterval = gtk_builder_get_object(builder, "SnoozeInterval");
+        gtk_spin_button_set_value(SnoozeInterval, json_object_get_int(json_object_object_get(clock_status, "snoozeInterval")));
+
         ClockReturn = gtk_builder_get_object(builder, "ClockReturn");
         gtk_spin_button_set_value(ClockReturn, json_object_get_int(json_object_object_get(clock_status, "clockReturn")));
 

@@ -48,7 +48,7 @@ class SunriseSiren3000Lighting {
 
     void showTime(String time, CRGB color, bool leadingZero = true) {
       for (int i=0; i<4; i++) {
-        int output = (time.equals("9999")) ? DIGIT_HYPHEN : String(time[i]).toInt(); // replace disabled alarms in preview with --:--
+        int output = (time.equals("----")) ? DIGIT_HYPHEN : String(time[i]).toInt(); // replace disabled alarms in preview with --:--
         if (i == 0 && output == 0 && !leadingZero) output = DIGIT_OFF; // remove leading zero if configured so
 
         this->showSingleDigit(i, output, color);
