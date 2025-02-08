@@ -10,6 +10,7 @@
 #include "NTP.h"
 #include "SHT21.h"
 #include "Alarm.h"
+#include "Countdown.h"
 #include "Button.h"
 #include "Authentication.h"
 
@@ -18,7 +19,8 @@ enum State {
   ALARM_PREVIEW,
   TEMPERATURE,
   HUMIDITY,
-  CUSTOM
+  CUSTOM,
+  COUNTDOWN
 };
 
 Preferences pref;
@@ -30,6 +32,7 @@ SunriseSiren3000LDR ldr;
 SunriseSiren3000Button button;
 SunriseSiren3000NTP ntp;
 SunriseSiren3000SHT21 sht21;
+SunriseSiren3000Countdown countdown;
 SunriseSiren3000Alarm alarms[7];
 
 unsigned long lastStateCycledAt = 0;
@@ -192,6 +195,19 @@ void setup() {
       currentState = CUSTOM;
       server.send(200, "text/plain", "Done!");
     });
+    server.on("/countdown", HTTP_POST, []() {
+      if (!server.hasArg("t") && !server.hasArg("pauseable")) {
+        server.send(400, "text/plain", "Missing arguments.");
+        return;
+      }
+      int totalSeconds = server.arg("t").toInt();
+
+      countdown.pauseable = (server.arg("pauseable").toInt() == 1);
+      countdown.start(totalSeconds);
+      currentState = COUNTDOWN;
+
+      server.send(200, "text/plain", "Done!");
+    });
     server.on("/reboot", HTTP_PATCH, []() {
       if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
 
@@ -233,36 +249,41 @@ void loop() {
   button.update();
   ntp.update();
   sht21.update();
+  countdown.update();
 
   String t = ntp.getTime();
   int d = ntp.getDay();
 
-  if (alarms[d].update(t, snoozeInterval)) currentState = CLOCK;
-
-  buzzer.enabled = alarms[d].activity;
-  buzzer.update();
-
   if (button.released) {
     if (alarms[d].tripping) alarms[d].snooze();
+    else if (currentState == COUNTDOWN && !countdown.ended) countdown.togglePause();
     else cycleState();
 
   } else if (button.held) {
     if (alarms[d].tripping || alarms[d].snoozed) alarms[d].stop();
+    else if (currentState == COUNTDOWN) currentState = CLOCK;
     else {
       lastStateCycledAt = millis();
       currentState = ALARM_PREVIEW;
     }
   }
 
-  if (millis() - lastStateCycledAt >= clockReturn && !(currentState == CLOCK || currentState == CUSTOM))
-    currentState = CLOCK;
+  if (
+    (millis() - lastStateCycledAt >= clockReturn && !(currentState == CLOCK || currentState == CUSTOM || currentState == COUNTDOWN)) ||
+    alarms[d].update(t, snoozeInterval)
+  ) currentState = CLOCK;
 
   if (currentState == CLOCK) {
+    if (countdown.started) countdown.stop();
+
     CRGB clockColor = (alarms[d].activity) ? lights.alarmColor : lights.defaultColor;
     CRGB colonColor = (!alarms[d].snoozed || millis() % 1000 < 750) ? clockColor : CRGB::Black;
 
     lights.showTime(t, clockColor, leadingZero);
     lights.setColonPoint(colonColor);
+
+    buzzer.enabled = alarms[d].activity;
+    buzzer.update();
   } else if (currentState == TEMPERATURE) {
     lights.showSingleDigit(0, (int)sht21.temperature / 10 % 10, lights.defaultColor);
     lights.showSingleDigit(1, (int)sht21.temperature % 10, lights.defaultColor);
@@ -287,10 +308,23 @@ void loop() {
     for (int i=0; i<4; i++) lights.showCustomDigit(i, customSegments[i], customColors[i]);
 
     lights.setColonPoint(customColonPoint);
+  } else if (currentState == COUNTDOWN) {
+    CRGB clockColor = (countdown.activity) ? lights.alarmColor : lights.defaultColor;
+
+    for (int i=0; i<4; i++) {
+      int digit = countdown.currentTime / (int) pow(10, i) % 10;
+      int shownDigit = (i > 0 && digit == 0 && countdown.currentTime < pow(10, i)) ? DIGIT_OFF : digit;
+
+      lights.showSingleDigit(3 - i, shownDigit, clockColor);
+    }
+    lights.setColonPoint(CRGB::Black);
+
+    buzzer.enabled = countdown.activity;
+    buzzer.update();
   }
 
   int brightness = ldr.averagedValue;
-  if (alarms[d].activity) brightness += ALARM_BRIGHTNESS_INCREMENT;
+  if (buzzer.enabled) brightness += ALARM_BRIGHTNESS_INCREMENT;
   lights.update(brightness);
 
   delay(20);

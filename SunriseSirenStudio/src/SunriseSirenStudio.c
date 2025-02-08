@@ -202,6 +202,13 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         g_signal_connect(CustomUpdate, "clicked", apply_custom_settings, NULL);
 
         // Miscellaneous
+        // Countdown
+        CountdownValue = gtk_builder_get_object(builder, "CountdownValue");
+        CountdownPauseable = gtk_builder_get_object(builder, "CountdownPauseable");
+
+        CountdownStart = gtk_builder_get_object(builder, "CountdownStart");
+        g_signal_connect(CountdownStart, "clicked", countdown_start, NULL);
+
         // Sensor information
         LDRReading = gtk_builder_get_object(builder, "LDRReading");
         SHT21TemperatureReading = gtk_builder_get_object(builder, "SHT21TemperatureReading");

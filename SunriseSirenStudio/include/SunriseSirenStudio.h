@@ -69,6 +69,11 @@ GtkButton *CustomDigitDisableAll;
 GtkButton *CustomDigitInvertAll;
 
 // Miscellaneous tab
+// Countdown
+GtkSpinButton *CountdownValue;
+GtkSwitch *CountdownPauseable;
+GtkButton *CountdownStart;
+
 // Sensor information
 GtkLabel *LDRReading;
 GtkLabel *SHT21TemperatureReading;

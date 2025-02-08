@@ -104,6 +104,26 @@ static void set_custom_digit(GtkWidget *widget, gpointer user_data) {
     gtk_combo_box_set_active(CustomDigit[target_index], combo_box_item_count - 1);
 }
 
+// countdown
+static void countdown_start(GtkWidget *widget, gpointer user_data) {
+    gint countdown_total = gtk_spin_button_get_value_as_int(CountdownValue);
+    gint countdown_pauseable = gtk_switch_get_active(CountdownPauseable);
+
+    if (countdown_total < 5) {
+        show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Cannot start countdown", "The countdown must be at least 5 seconds!");
+        return;
+    }
+
+    gchar *post_url[PATH_MAX];
+    gchar *post_string[64];
+
+    sprintf(post_url, "http://%s/countdown", hostname);
+    sprintf(post_string, "t=%i&pauseable=%i", countdown_total, countdown_pauseable);
+
+    gchar *result = request("POST", post_url, username, password, post_string);
+    if (strstr(result, "Done!")) show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Done!", "Countdown is running now!");
+}
+
 // sensor information
 void get_sensor_values() {
     gchar* sensors_url[PATH_MAX];
