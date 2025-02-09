@@ -19,12 +19,18 @@ void reboot_clock() {
     gint prompt = show_message_dialog(MainWindow, GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO, "Reboot?", "Are you sure you want to reboot your Sunrise Siren 3000?");
 
     if (prompt == GTK_RESPONSE_YES) {
-        gchar *url[PATH_MAX];
-        sprintf(url, "http://%s/reboot", hostname);
+        gchar *reboot_url[PATH_MAX];
+        sprintf(reboot_url, "http://%s/reboot", hostname);
 
-        request("PATCH", url, username, password, "");
+        gchar *reboot = request("PATCH", reboot_url, username, password, "");
 
-        show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Rebooted!", "Your Sunrise Siren 3000 has been rebooted.");
+        if (reboot && strstr(reboot, "Initiating reboot.")) {
+            // reboot performed successful
+            show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Success!", "Your Sunrise Siren 3000 will reboot any moment now.");
+        } else {
+            // error while trying to perform reboot
+            show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Failed to reboot", "An error occured while rebooting your Sunrise Siren 3000. Please try again later.");
+        }
     }
 }
 

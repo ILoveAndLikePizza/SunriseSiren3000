@@ -35,6 +35,7 @@ SunriseSiren3000SHT21 sht21;
 SunriseSiren3000Countdown countdown;
 SunriseSiren3000Alarm alarms[7];
 
+unsigned long rebootSignalSentAt = 0;
 unsigned long lastStateCycledAt = 0;
 enum State currentState = CLOCK;
 
@@ -211,7 +212,8 @@ void setup() {
     server.on("/reboot", HTTP_PATCH, []() {
       if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
 
-      ESP.restart();
+      server.send(200, "text/plain", "Initiating reboot.");
+      rebootSignalSentAt = millis();
     });
     server.onNotFound([]() {
       server.send(404, "text/plain", "404 Not Found");
@@ -244,6 +246,8 @@ void setup() {
 void loop() {
   ArduinoOTA.handle();
   server.handleClient();
+
+  if (rebootSignalSentAt > 0 && millis() - rebootSignalSentAt >= 1500) ESP.restart();
 
   ldr.update();
   button.update();
