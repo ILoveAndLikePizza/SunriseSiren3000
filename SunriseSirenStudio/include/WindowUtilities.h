@@ -166,12 +166,12 @@ void get_sensor_values() {
 // save buttons
 static void apply_clock_settings(GtkWidget *widget, gpointer user_data) {
     // step 1: collect all settings
-    glong default_c_number = default_color->red * 255 * (int) pow(256, 2)
-        + default_color->green * 255 * (int) pow(256, 1)
-        + default_color->blue * 255 * (int) pow(256, 0);
-    glong alarm_c_number = alarm_color->red * 255 * (int) pow(256, 2)
-        + alarm_color->green * 255 * (int) pow(256, 1)
-        + alarm_color->blue * 255 * (int) pow(256, 0);
+    glong default_c_number = (int) (default_color->red * 255) * (int) pow(256, 2)
+        + (int) (default_color->green * 255) * (int) pow(256, 1)
+        + (int) (default_color->blue * 255) * (int) pow(256, 0);
+    glong alarm_c_number = (int) (alarm_color->red * 255) * (int) pow(256, 2)
+        + (int) (alarm_color->green * 255) * (int) pow(256, 1)
+        + (int) (alarm_color->blue * 255) * (int) pow(256, 0);
 
     gint alarms_enabled = 0;
     gint alarm_hours[7];
@@ -225,17 +225,17 @@ static void apply_custom_settings(GtkWidget *widget, gpointer user_data) {
     gint custom_digits[4];
 
     for (int i=0; i<4; i++) {
-        color_numbers[i] = custom_colors[i]->red * 255 * (int) pow(256, 2)
-            + custom_colors[i]->green * 255 * (int) pow(256, 1)
-            + custom_colors[i]->blue * 255 * (int) pow(256, 0);
+        color_numbers[i] = (int) (custom_colors[i]->red * 255) * (int) pow(256, 2)
+            + (int) (custom_colors[i]->green * 255) * (int) pow(256, 1)
+            + (int) (custom_colors[i]->blue * 255) * (int) pow(256, 0);
 
         gint combo_box_number = custom_combo_box_get_corresponding_number(CustomDigit[i]);
         custom_digits[i] = (combo_box_number == 0) ? atoi(gtk_entry_get_text(CustomDigitEntry[i])) : combo_box_number;
     }
 
-    glong color_colon = custom_colors[4]->red * 255 * (int) pow(256, 2)
-        + custom_colors[4]->green * 255 * (int) pow(256, 1)
-        + custom_colors[4]->blue * 255 * (int) pow(256, 0);
+    glong color_colon = (int) (custom_colors[4]->red * 255) * (int) pow(256, 2)
+        + (int) (custom_colors[4]->green * 255) * (int) pow(256, 1)
+        + (int) (custom_colors[4]->blue * 255) * (int) pow(256, 0);
 
     // step 2: make a request string
     gchar *segment_strings[4][64];
