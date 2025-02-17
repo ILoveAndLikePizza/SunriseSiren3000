@@ -11,6 +11,7 @@ This repository consists of two relevant parts of the clock:
 ## Firmware setup
 1. Navigate to the `SunriseSirenFirmware` directory.
 2. Copy `Authentication.h.example` to `Authentication.h` and change the values in that file to whatever you like. (Note that values over 32 characters are very difficult to enter into Sunrise Siren Studio.)
+> **WARNING:** Sunrise Siren 3000 passwords are NOT encrypted or hashed anywhere. **DO NOT USE A PASSWORD THAT YOU ALREADY USE SOMEWHERE ELSE!**
 3. Launch the Arduino IDE and load the `SunriseSirenFirmware.ino` sketch.
 > **Hint:** you can add the firmware sketch to your Arduino IDE sketchbook with a symlink:
 > ```bash
