@@ -241,6 +241,9 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         ConnectConfirm = gtk_builder_get_object(builder, "ConnectConfirm");
         g_signal_connect(ConnectConfirm, "clicked", create_connection, NULL);
 
+        ConnectVersion = gtk_builder_get_object(builder, "ConnectVersion");
+        gtk_label_set_label(ConnectVersion, VERSION);
+
         gtk_application_add_window(app, ConnectionWindow);
         gtk_widget_show_all(ConnectionWindow);
     } else if (target == WINDOW_ERROR) {

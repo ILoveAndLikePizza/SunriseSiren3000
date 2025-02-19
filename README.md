@@ -36,9 +36,14 @@ This repository consists of two relevant parts of the clock:
 <br>
 
 ## Sunrise Siren Studio installation
-1. Ensure that the required libraries are installed. On Debian(-based) systems, those can be installed by running:
+1. Ensure that the required libraries are installed.  
+With `apt`, those can be installed by running:
     ```bash
-    sudo apt install libgtk-3-dev libcurl4-openssl-dev libjson-c-dev
+    sudo apt install gcc libgtk-3-dev libcurl4-openssl-dev libjson-c-dev
+    ```
+    And with `dnf`:
+    ```bash
+    sudo dnf install gcc gtk3-devel libcurl-devel json-c-devel
     ```
 2. Navigate to the `SunriseSirenStudio` directory.
 3. Minify the Glade sketch into a UI header file by running:

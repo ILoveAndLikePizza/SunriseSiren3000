@@ -127,7 +127,13 @@ static void countdown_start(GtkWidget *widget, gpointer user_data) {
     sprintf(post_string, "t=%i&pauseable=%i", countdown_total, countdown_pauseable);
 
     gchar *result = request("POST", post_url, username, password, post_string);
-    if (strstr(result, "Done!")) show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Done!", "Countdown is running now!");
+    if (result && strstr(result, "Done!")) {
+        // countdown successfully started
+        show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Success!", "Countdown is running now!");
+    } else {
+        // error while trying to start countdown
+        show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Failed to start countdown", "An error occured while starting the countdown. Please try again later.");
+    }
 }
 
 // sensor information
@@ -216,7 +222,13 @@ static void apply_clock_settings(GtkWidget *widget, gpointer user_data) {
 
     // step 3: yeet a request
     gchar *result = request("POST", post_url, username, password, post_string);
-    if (strstr(result, "Done!")) show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Done!", "Changes have been saved and applied!");
+    if (result && strstr(result, "Done!")) {
+        // settings successfully applied
+        show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Success!", "Changes have been saved and applied!");
+    } else {
+        // error while trying to apply settings
+        show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Failed to save settings", "An error occured while trying to save and apply the settings. Please try again later.");
+    }
 }
 
 static void apply_custom_settings(GtkWidget *widget, gpointer user_data) {
@@ -260,7 +272,13 @@ static void apply_custom_settings(GtkWidget *widget, gpointer user_data) {
 
     // step 3: yeet a request
     gchar *result = request("POST", post_url, username, password, post_string);
-    if (strstr(result, "Done!")) show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Done!", "Custom configuration has been saved and is visible now!");
+    if (result && strstr(result, "Done!")) {
+        // custom config successfully set
+        show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Success!", "Custom configuration has been saved and is visible now!");
+    } else {
+        // failed to set custom config
+        show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Failed to show custom mode", "An error occured while trying to save and show the custom mode. Please try again later.");
+    }
 }
 
 // ConnectionWindow
@@ -279,7 +297,7 @@ static void create_connection(GtkWidget *widget, gpointer user_data) {
 
     gchar* req = request("GET", url, username, password, "");
 
-    if (strstr(req, VALIDATION_STRING)) {
+    if (req && strstr(req, VALIDATION_STRING)) {
         // authentication successful, save and continue
 
         credentials_write(hostname, username, password);

@@ -1,6 +1,8 @@
 #ifndef _sunrise_siren_studio_h
 #define _sunrise_siren_studio_h
 
+#define VERSION "v1.0.1"
+
 #include <stdlib.h>
 #include <math.h>
 
@@ -91,6 +93,7 @@ GtkEntry *ConnectHostname;
 GtkEntry *ConnectUsername;
 GtkEntry *ConnectPassword;
 GtkButton *ConnectConfirm;
+GtkLabel *ConnectVersion;
 
 // ErrorWindow
 GtkWindow *ErrorWindow;
