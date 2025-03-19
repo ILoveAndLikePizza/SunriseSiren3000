@@ -1,7 +1,7 @@
 #ifndef _sunrise_siren_studio_h
 #define _sunrise_siren_studio_h
 
-#define VERSION "v1.0.1"
+#define VERSION "v1.0.2"
 
 #include <stdlib.h>
 #include <math.h>

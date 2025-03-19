@@ -11,7 +11,7 @@ void quit() {
 void reboot_program() {
     execl("/proc/self/exe", argv0, NULL);
 
-    perror("An error occured while rebooting Sunrise Siren Studio.");
+    perror("An error occurred while rebooting Sunrise Siren Studio.");
     exit(2);
 }
 
@@ -29,7 +29,7 @@ void reboot_clock() {
             show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Success!", "Your Sunrise Siren 3000 will reboot any moment now.");
         } else {
             // error while trying to perform reboot
-            show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Failed to reboot", "An error occured while rebooting your Sunrise Siren 3000. Please try again later.");
+            show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Failed to reboot", "An error occurred while rebooting your Sunrise Siren 3000. Please try again later.");
         }
     }
 }
@@ -132,7 +132,7 @@ static void countdown_start(GtkWidget *widget, gpointer user_data) {
         show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Success!", "Countdown is running now!");
     } else {
         // error while trying to start countdown
-        show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Failed to start countdown", "An error occured while starting the countdown. Please try again later.");
+        show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Failed to start countdown", "An error occurred while starting the countdown. Please try again later.");
     }
 }
 
@@ -227,7 +227,7 @@ static void apply_clock_settings(GtkWidget *widget, gpointer user_data) {
         show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Success!", "Changes have been saved and applied!");
     } else {
         // error while trying to apply settings
-        show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Failed to save settings", "An error occured while trying to save and apply the settings. Please try again later.");
+        show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Failed to save settings", "An error occurred while trying to save and apply the settings. Please try again later.");
     }
 }
 
@@ -277,7 +277,7 @@ static void apply_custom_settings(GtkWidget *widget, gpointer user_data) {
         show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Success!", "Custom configuration has been saved and is visible now!");
     } else {
         // failed to set custom config
-        show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Failed to show custom mode", "An error occured while trying to save and show the custom mode. Please try again later.");
+        show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Failed to show custom mode", "An error occurred while trying to save and show the custom mode. Please try again later.");
     }
 }
 
