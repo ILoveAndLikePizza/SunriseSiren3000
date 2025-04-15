@@ -81,6 +81,7 @@ void cycleState() {
 
 void setup() {
   WiFiManager wm;
+  wm.setHostname(HOSTNAME);
   wm.setConfigPortalBlocking(false);
   wm.setConfigPortalTimeout(90);
 
