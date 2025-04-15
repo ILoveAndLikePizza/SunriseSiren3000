@@ -331,5 +331,5 @@ void loop() {
   if (buzzer.enabled) brightness += ALARM_BRIGHTNESS_INCREMENT;
   lights.update(brightness);
 
-  delay(20);
+  for (int i=0; i<4; i++) delay(5);
 }
