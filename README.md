@@ -9,7 +9,7 @@ This repository consists of two relevant parts of the clock:
 - the control program, **Sunrise Siren Studio**, located in the `SunriseSirenStudio` directory. It is made with the [Gimp ToolKit](https://gtk.org/) (GTK) in C, making it only available to Linux (and WSL2) users. The program has to be compiled from source.
 
 ## Why are there no prebuilt binaries?
-- The clock's firmware contains sensitive information, which is required to make configuration changes or to flash new firmware. This information is stored in a header file, and the program cannot be compiled without it, therefore obstructing me from providing a prebuilt esptool-ready binary.
+- The clock's firmware contains sensitive information, which is required to make configuration changes or to flash new firmware. This information is stored in a header file, and the program cannot be compiled without it, therefore obstructing me from providing a prebuilt esptool-ready binary. Furthermore, firmware flashing is mostly done by using `ArduinoOTA`, which is the easiest in the Arduino IDE.
 - The control program does not work by itself. It also relies on the desktop entry file, icon, and GSettings schema, which are not included in the binary file. Maybe I will provide `deb` and `rpm` packages in the future :)
 
 ## Firmware setup
@@ -18,7 +18,7 @@ This repository consists of two relevant parts of the clock:
 > [!IMPORTANT]
 > Ensure that all your specified values are less than 32 characters. Otherwise, they are very difficult to enter in Sunrise Siren Studio later on.
 
-> [!WARNING]
+> [!CAUTION]
 > Sunrise Siren 3000 passwords are NOT encrypted or hashed anywhere. **DO NOT USE A PASSWORD THAT YOU ALREADY USE SOMEWHERE ELSE!**
 3. Launch the Arduino IDE and load the `SunriseSirenFirmware.ino` sketch.
 > **Hint:** you can add the firmware sketch to your Arduino IDE sketchbook with a symlink:
