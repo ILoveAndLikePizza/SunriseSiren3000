@@ -35,6 +35,7 @@ SunriseSiren3000SHT21 sht21;
 SunriseSiren3000Countdown countdown;
 SunriseSiren3000Alarm alarms[7];
 
+unsigned long ticks = 0;
 unsigned long rebootSignalSentAt = 0;
 unsigned long lastStateCycledAt = 0;
 enum State currentState = CLOCK;
@@ -252,8 +253,10 @@ void loop() {
 
   ldr.update();
   button.update();
-  ntp.update();
-  sht21.update();
+  if (ticks % 50 == 0) {
+    ntp.update();
+    sht21.update();
+  }
   countdown.update();
 
   String t = ntp.getTime();
@@ -332,5 +335,6 @@ void loop() {
   if (buzzer.enabled) brightness += ALARM_BRIGHTNESS_INCREMENT;
   lights.update(brightness);
 
-  for (int i=0; i<4; i++) delay(5);
+  delay(20);
+  ticks++;
 }

@@ -7,17 +7,6 @@
 class SunriseSiren3000SHT21 {
   private:
     SHT2x sht;
-    unsigned long ticks;
-
-    void refreshValues() {
-      this->sht.read();
-
-      this->rawTemperature = this->sht.getRawTemperature();
-      this->rawHumidity = this->sht.getRawHumidity();
-
-      this->temperature = this->sht.getTemperature();
-      this->humidity = this->sht.getHumidity();
-    }
 
   public:
     int rawTemperature;
@@ -29,12 +18,16 @@ class SunriseSiren3000SHT21 {
       Wire.begin(SDA_PIN, SCL_PIN);
       this->sht.begin();
 
-      this->refreshValues();
+      this->update();
     }
 
     void update() {
-      if (++ticks % 50 > 0) return;
+      this->sht.read();
 
-      this->refreshValues();
+      this->rawTemperature = this->sht.getRawTemperature();
+      this->rawHumidity = this->sht.getRawHumidity();
+
+      this->temperature = this->sht.getTemperature();
+      this->humidity = this->sht.getHumidity();
     }
 };
