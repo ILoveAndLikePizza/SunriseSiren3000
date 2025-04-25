@@ -6,22 +6,22 @@
 The Sunrise Siren 3000 is the clock I have in front of my bed. Its job is to display time, temperature and humidity, but most importantly, wake me up whenever I have to wake up. I realize that you may not own a Sunrise Siren 3000 yourself, but I still like to make this project open-source :P  
 This repository consists of two relevant parts of the clock:  
 - the firmware of the clock, located in the `SunriseSirenFirmware` directory. It is flashed onto the ESP32 inside it by using the [Arduino IDE](https://www.arduino.cc/en/software);
-- the control program, **Sunrise Siren Studio**, located in the `SunriseSirenStudio` directory. It is made with the [Gimp ToolKit](https://gtk.org/) (GTK) in C, making it only available to Linux (and WSL2) users. The program has to be compiled from source.
+- the control program, **Sunrise Siren Studio**, located in the `SunriseSirenStudio` directory. It is made with the [Gimp ToolKit](https://gtk.org/) (GTK) in C, making it only available to Linux (and WSL2) users. A `.deb` release is available for Debian/Ubuntu/Mint users. For other distributions, the program has to be compiled from source.
 
-## Why are there no prebuilt binaries?
-- The clock's firmware contains sensitive information, which is required to make configuration changes or to flash new firmware. This information is stored in a header file, and the program cannot be compiled without it, therefore obstructing me from providing a prebuilt esptool-ready binary. Furthermore, firmware flashing is mostly done by using `ArduinoOTA`, which is the easiest in the Arduino IDE.
-- The control program does not work by itself. It also relies on the desktop entry file, icon, and GSettings schema, which are not included in the binary file. Maybe I will provide `deb` and `rpm` packages in the future :)
+## Why are there no prebuilt firmware binaries?
+The clock's firmware contains sensitive information, which is required to make configuration changes or to flash new firmware. This information is stored in a header file, and the program cannot be compiled without it, therefore obstructing me from providing a prebuilt esptool-ready binary. Furthermore, firmware flashing is mostly done by using `ArduinoOTA`, which is the easiest in the Arduino IDE.
 
 ## Firmware setup
 1. Navigate to the `SunriseSirenFirmware` directory.
 2. Copy `Authentication.h.example` to `Authentication.h` and change the values in that file to whatever you like.
 > [!IMPORTANT]
-> Ensure that all your specified values are less than 32 characters. Otherwise, they are very difficult to enter in Sunrise Siren Studio later on.
+> Sunrise Siren Studio supports up to 32 characters for the hostname, username and password. Keep that in mind while editing the file.
 
 > [!CAUTION]
 > Sunrise Siren 3000 passwords are NOT encrypted or hashed anywhere. **DO NOT USE A PASSWORD THAT YOU ALREADY USE SOMEWHERE ELSE!**
 3. Launch the Arduino IDE and load the `SunriseSirenFirmware.ino` sketch.
-> **Hint:** you can add the firmware sketch to your Arduino IDE sketchbook with a symlink:
+> [!TIP]
+> You can add the firmware sketch to your Arduino IDE sketchbook with a symlink:
 > ```bash
 > ln -s $(pwd) ~/Arduino
 > ```
@@ -43,7 +43,7 @@ This repository consists of two relevant parts of the clock:
 ### Congratulations, the Sunrise Siren 3000 firmware has been flashed successfully!
 <br>
 
-## Sunrise Siren Studio installation
+## Sunrise Siren Studio compilation
 1. Ensure that the required libraries are installed.  
 With `apt`, those can be installed by running:
     ```bash
@@ -75,10 +75,12 @@ With `apt`, those can be installed by running:
 <br>
 
 ## Sunrise Siren Studio uninstallation
-1. Simply run:
+1. Simply run:For Debian/Ubuntu/Mint users, the easiest way to install Sunrise Siren Studio is using the `.deb` file found in the releases.
     ```bash
     sudo make uninstall
     ```
+> [!WARNING]
+> This also removes the entered credentials!
 2. Optionally, you can remove all minified and compiled files from the repository:
     ```bash
     make clean
