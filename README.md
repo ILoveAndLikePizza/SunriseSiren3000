@@ -75,12 +75,12 @@ With `apt`, those can be installed by running:
 <br>
 
 ## Sunrise Siren Studio uninstallation
-1. Simply run:For Debian/Ubuntu/Mint users, the easiest way to install Sunrise Siren Studio is using the `.deb` file found in the releases.
+1. For Debian/Ubuntu/Mint users, the easiest way to install Sunrise Siren Studio is using the `.deb` file found in the releases.
     ```bash
     sudo make uninstall
     ```
 > [!WARNING]
-> This also removes the entered credentials!
+> This also removes the saved credentials!
 2. Optionally, you can remove all minified and compiled files from the repository:
     ```bash
     make clean
