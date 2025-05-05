@@ -58,24 +58,29 @@ With `apt`, those can be installed by running:
     ```bash
     make
     ```
-4.  If you want to install the program right away, skip to the next step. If you want to test the program first (inside the repository), it is necessary to refer to the compiled GSchema by using the `GSETTINGS_SCHEMA_DIR` environment variable when executing the binary:
-    ```bash
-    GSETTINGS_SCHEMA_DIR=$(pwd)/schema build/sunrise-siren-studio
-    ```
 > [!NOTE]
+> If you want to test the program first (inside the repository, without installing it yet), it is necessary to refer to the compiled GSchema by using the `GSETTINGS_SCHEMA_DIR` environment variable when executing the binary:
+> ```bash
+> GSETTINGS_SCHEMA_DIR=$(pwd)/schema build/sunrise-siren-studio
+> ```
+> Note that:
 > - This command assumes that you are in the `SunriseSirenStudio` directory.
 > - The icon on the connection window may not be visible if the program (and so, its icon) is not installed yet.
-5. To install the program on your computer, run:
+4. To install the program on your computer, run:
     ```bash
     sudo make install
     ```
-6. To launch the program, simply search for "Sunrise Siren Studio" in the search bar of your computer!
+    Or, if you want to build your own `.deb` file and install it from there, run:
+    ```bash
+    make deb
+    ```
+5. To launch the program, simply search for "Sunrise Siren Studio" in the search bar of your computer!
 
 ### Congratulations, Sunrise Siren Studio is up and running now!
 <br>
 
 ## Sunrise Siren Studio uninstallation
-1. For Debian/Ubuntu/Mint users, the easiest way to install Sunrise Siren Studio is using the `.deb` file found in the releases.
+1. Simply run:
     ```bash
     sudo make uninstall
     ```

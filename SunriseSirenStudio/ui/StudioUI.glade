@@ -618,16 +618,16 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="DefaultColor">
-                                <property name="name">default</property>
+                              <object class="GtkColorButton" id="DefaultColor">
                                 <property name="width-request">80</property>
                                 <property name="height-request">34</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
-                                <property name="tooltip-text" translatable="yes">Click to select a color</property>
                                 <property name="halign">end</property>
                                 <property name="hexpand">True</property>
+                                <property name="title" translatable="yes">Select a default color</property>
+                                <property name="show-editor">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -662,16 +662,16 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="AlarmColor">
-                                <property name="name">alarm</property>
+                              <object class="GtkColorButton" id="AlarmColor">
                                 <property name="width-request">80</property>
                                 <property name="height-request">34</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
-                                <property name="tooltip-text" translatable="yes">Click to select a color</property>
                                 <property name="halign">end</property>
                                 <property name="hexpand">True</property>
+                                <property name="title" translatable="yes">Select an alarm color</property>
+                                <property name="show-editor">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -1757,71 +1757,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="CustomColor-0">
-                        <property name="label" translatable="yes"> </property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="tooltip-text" translatable="yes">Click to select a color</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="CustomColor-1">
-                        <property name="label" translatable="yes"> </property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="tooltip-text" translatable="yes">Click to select a color</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="CustomColor-Colon">
-                        <property name="label" translatable="yes"> </property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="tooltip-text" translatable="yes">Click to select a color</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">2</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="CustomColor-2">
-                        <property name="label" translatable="yes"> </property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="tooltip-text" translatable="yes">Click to select a color</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">3</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="CustomColor-3">
-                        <property name="label" translatable="yes"> </property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="tooltip-text" translatable="yes">Click to select a color</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">4</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkComboBox" id="CustomDigit-0">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -1939,6 +1874,71 @@
                       <packing>
                         <property name="left-attach">4</property>
                         <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkColorButton" id="CustomColor-0">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="title" translatable="yes">Select a color for digit 1</property>
+                        <property name="show-editor">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkColorButton" id="CustomColor-1">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="title" translatable="yes">Select a color for digit 2</property>
+                        <property name="show-editor">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkColorButton" id="CustomColor-Colon">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="title" translatable="yes">Select a color for the colon</property>
+                        <property name="show-editor">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkColorButton" id="CustomColor-2">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="title" translatable="yes">Select a color for digit 3</property>
+                        <property name="show-editor">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkColorButton" id="CustomColor-3">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="title" translatable="yes">Select a color for digit 4</property>
+                        <property name="show-editor">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">4</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -2407,6 +2407,20 @@
                       <packing>
                         <property name="x">590</property>
                         <property name="y">320</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="CustomDigitApplyAll">
+                        <property name="label" translatable="yes">All</property>
+                        <property name="width-request">50</property>
+                        <property name="height-request">34</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                      </object>
+                      <packing>
+                        <property name="x">680</property>
+                        <property name="y">229</property>
                       </packing>
                     </child>
                   </object>

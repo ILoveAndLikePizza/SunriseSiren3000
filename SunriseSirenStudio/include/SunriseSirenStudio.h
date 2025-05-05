@@ -1,7 +1,7 @@
 #ifndef _sunrise_siren_studio_h
 #define _sunrise_siren_studio_h
 
-#define VERSION "v1.1.0"
+#define VERSION "v1.2.0"
 
 #include <stdlib.h>
 #include <math.h>
@@ -25,18 +25,14 @@ json_object *clock_sensors;
 
 GSettings *credentials;
 
-GdkRGBA *default_color;
-GdkRGBA *alarm_color;
-GdkRGBA *custom_colors[5]; // 0-3 are digits, 4 is colon
-
 GtkStack *MainStack;
 
 // MainWindow
 GtkWindow *MainWindow;
 // Clock settings tab
 // Colors
-GtkButton *DefaultColor;
-GtkButton *AlarmColor;
+GtkColorButton *DefaultColor;
+GtkColorButton *AlarmColor;
 
 // Alarms
 GtkSwitch *AlarmEnable[7];
@@ -56,8 +52,8 @@ GtkButton *ClockUpdate;
 // Custom mode tab
 GtkListStore *CustomDigits;
 // Basic configuration
-GtkButton *CustomColor[4];
-GtkButton *CustomColor_Colon;
+GtkColorButton *CustomColor[4];
+GtkColorButton *CustomColor_Colon;
 GtkComboBox *CustomDigit[4];
 GtkEntry *CustomDigitEntry[4];
 GtkButton *CustomUpdate;
@@ -66,6 +62,7 @@ GtkButton *CustomUpdate;
 GtkToggleButton *CustomSegmentNumber[21];
 GtkEntry *CustomDigitApplyIndex;
 GtkButton *CustomDigitApply;
+GtkButton *CustomDigitApplyAll;
 GtkButton *CustomDigitEnableAll;
 GtkButton *CustomDigitDisableAll;
 GtkButton *CustomDigitInvertAll;

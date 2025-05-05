@@ -11,11 +11,6 @@ default: src/SunriseSirenStudio.c schema/org.x.sunrise-siren-studio.credentials.
 
 	glib-compile-schemas schema/
 
-clean:
-	rm -rf build
-	rm include/UI.h
-	rm schema/gschemas.compiled
-
 install:
 	mkdir -p $(BINDIR) $(SHAREDIR)/glib-2.0/schemas $(SHAREDIR)/applications $(SHAREDIR)/icons/hicolor/256x256@2/apps
 
@@ -37,3 +32,11 @@ uninstall:
 	glib-compile-schemas $(SHAREDIR)/glib-2.0/schemas
 
 	dconf reset -f /org/x/sunrise-siren-studio/credentials/
+
+deb:
+	dist/make-deb.sh
+
+clean:
+	rm -rf build
+	rm include/UI.h
+	rm schema/gschemas.compiled

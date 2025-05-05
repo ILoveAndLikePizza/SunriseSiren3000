@@ -44,21 +44,7 @@ void reconfigure() {
 }
 
 // MainWindow
-// color selection
-static void pick_color(GtkWidget *widget, gpointer user_data) {
-    GtkColorSelectionDialog *dialog = gtk_color_selection_dialog_new("Select a color");
-    GtkColorSelection *selection = gtk_color_selection_dialog_get_color_selection(dialog);
-
-    gtk_color_selection_set_current_rgba(selection, user_data);
-
-    if (gtk_dialog_run(dialog) == GTK_RESPONSE_OK) {
-        gtk_color_selection_get_current_rgba(selection, user_data);
-        gtk_widget_override_background_color(widget, GTK_STATE_NORMAL, user_data);
-    }
-
-    gtk_widget_destroy(dialog);
-}
-
+// alarm settings
 static void validate_alarm_time_sensitivity(GtkWidget *widget, gboolean state, gpointer user_data) {
     gint index = user_data;
 
@@ -95,7 +81,7 @@ static void invert_all_custom_pixels(GtkWidget *widget, gpointer user_data) {
 }
 
 static void set_custom_digit(GtkWidget *widget, gpointer user_data) {
-    gint target_index = gtk_spin_button_get_value_as_int(CustomDigitApplyIndex) - 1;
+    gint target_index = user_data ? user_data - 1 : gtk_spin_button_get_value_as_int(CustomDigitApplyIndex) - 1;
     gint custom_number = 0;
     gchar *entry_text[12];
 
@@ -108,6 +94,10 @@ static void set_custom_digit(GtkWidget *widget, gpointer user_data) {
 
     gint combo_box_item_count = gtk_tree_model_iter_n_children(gtk_combo_box_get_model(CustomDigit[target_index]), NULL);
     gtk_combo_box_set_active(CustomDigit[target_index], combo_box_item_count - 1);
+}
+
+static void set_all_custom_digits(GtkWidget *widget, gpointer user_data) {
+    for (int i=0; i<4; i++) set_custom_digit(widget, i + 1);
 }
 
 // countdown
@@ -172,12 +162,17 @@ void get_sensor_values() {
 // save buttons
 static void apply_clock_settings(GtkWidget *widget, gpointer user_data) {
     // step 1: collect all settings
-    glong default_c_number = (int) (default_color->red * 255) * (int) pow(256, 2)
-        + (int) (default_color->green * 255) * (int) pow(256, 1)
-        + (int) (default_color->blue * 255) * (int) pow(256, 0);
-    glong alarm_c_number = (int) (alarm_color->red * 255) * (int) pow(256, 2)
-        + (int) (alarm_color->green * 255) * (int) pow(256, 1)
-        + (int) (alarm_color->blue * 255) * (int) pow(256, 0);
+    GdkRGBA *default_c = g_new(GdkRGBA, 1);
+    GdkRGBA *alarm_c = g_new(GdkRGBA, 1);
+    gtk_color_chooser_get_rgba(DefaultColor, &*default_c);
+    gtk_color_chooser_get_rgba(AlarmColor, &*alarm_c);
+
+    glong default_c_number = (int) (default_c->red * 255) * (int) pow(256, 2)
+        + (int) (default_c->green * 255) * (int) pow(256, 1)
+        + (int) (default_c->blue * 255) * (int) pow(256, 0);
+    glong alarm_c_number = (int) (alarm_c->red * 255) * (int) pow(256, 2)
+        + (int) (alarm_c->green * 255) * (int) pow(256, 1)
+        + (int) (alarm_c->blue * 255) * (int) pow(256, 0);
 
     gint alarms_enabled = 0;
     gint alarm_hours[7];
@@ -233,10 +228,14 @@ static void apply_clock_settings(GtkWidget *widget, gpointer user_data) {
 
 static void apply_custom_settings(GtkWidget *widget, gpointer user_data) {
     // step 1: collect all settings
+    GdkRGBA *custom_colors[5]; // 0-3 are digits, 4 is colon
     glong color_numbers[4];
     gint custom_digits[4];
 
     for (int i=0; i<4; i++) {
+        custom_colors[i] = g_new(GdkRGBA, 1);
+        gtk_color_chooser_get_rgba(CustomColor[i], &*custom_colors[i]);
+
         color_numbers[i] = (int) (custom_colors[i]->red * 255) * (int) pow(256, 2)
             + (int) (custom_colors[i]->green * 255) * (int) pow(256, 1)
             + (int) (custom_colors[i]->blue * 255) * (int) pow(256, 0);
@@ -245,6 +244,8 @@ static void apply_custom_settings(GtkWidget *widget, gpointer user_data) {
         custom_digits[i] = (combo_box_number == 0) ? atoi(gtk_entry_get_text(CustomDigitEntry[i])) : combo_box_number;
     }
 
+    custom_colors[4] = g_new(GdkRGBA, 1);
+    gtk_color_chooser_get_rgba(CustomColor_Colon, &*custom_colors[4]);
     glong color_colon = (int) (custom_colors[4]->red * 255) * (int) pow(256, 2)
         + (int) (custom_colors[4]->green * 255) * (int) pow(256, 1)
         + (int) (custom_colors[4]->blue * 255) * (int) pow(256, 0);

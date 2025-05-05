@@ -9,7 +9,7 @@ SunriseSirenFirmware/Authentication.h
 \#*.glade#
 
 # ignore Sunrise Siren Studio builds
-sunrise-siren-studio
+SunriseSirenStudio/build/*
 
 # ignore compiled GSchemas
 gschemas.compiled

@@ -62,26 +62,22 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         DefaultColor = gtk_builder_get_object(builder, "DefaultColor");
 
         glong current_default_color = json_object_get_int64(json_object_object_get(json_object_object_get(clock_status, "colors"), "default"));
-        default_color = g_new(GdkRGBA, 1);
-        default_color->red = (current_default_color / (int) pow(256, 2) % 256) / 255;
-        default_color->green = (current_default_color / (int) pow(256, 1) % 256) / 255;
-        default_color->blue = (current_default_color / (int) pow(256, 0) % 256) / 255;
+        GdkRGBA *default_color = g_new(GdkRGBA, 1);
+        default_color->red = (gdouble) (current_default_color / (int) pow(256, 2) % 256) / 255;
+        default_color->green = (gdouble) (current_default_color / (int) pow(256, 1) % 256) / 255;
+        default_color->blue = (gdouble) (current_default_color / (int) pow(256, 0) % 256) / 255;
         default_color->alpha = 1;
-
-        gtk_widget_override_background_color(DefaultColor, GTK_STATE_NORMAL, default_color);
-        g_signal_connect(DefaultColor, "clicked", pick_color, default_color);
+        gtk_color_chooser_set_rgba(DefaultColor, default_color);
 
         AlarmColor = gtk_builder_get_object(builder, "AlarmColor");
 
         glong current_alarm_color = json_object_get_int64(json_object_object_get(json_object_object_get(clock_status, "colors"), "alarm"));
-        alarm_color = g_new(GdkRGBA, 1);
-        alarm_color->red = (current_alarm_color / (int) pow(256, 2) % 256) / 255;
-        alarm_color->green = (current_alarm_color / (int) pow(256, 1) % 256) / 255;
-        alarm_color->blue = (current_alarm_color / (int) pow(256, 0) % 256) / 255;
+        GdkRGBA *alarm_color = g_new(GdkRGBA, 1);
+        alarm_color->red = (gdouble) (current_alarm_color / (int) pow(256, 2) % 256) / 255;
+        alarm_color->green = (gdouble) (current_alarm_color / (int) pow(256, 1) % 256) / 255;
+        alarm_color->blue = (gdouble) (current_alarm_color / (int) pow(256, 0) % 256) / 255;
         alarm_color->alpha = 1;
-
-        gtk_widget_override_background_color(AlarmColor, GTK_STATE_NORMAL, alarm_color);
-        g_signal_connect(AlarmColor, "clicked", pick_color, alarm_color);
+        gtk_color_chooser_set_rgba(AlarmColor, alarm_color);
 
         // Alarms
         gchar* alarm_times = json_object_get_string(json_object_object_get(clock_status, "alarmTimes"));
@@ -156,27 +152,23 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
             CustomDigit[i] = gtk_builder_get_object(builder, combobox_id);
             CustomDigitEntry[i] = gtk_builder_get_object(builder, colorentry_id);
 
-            custom_colors[i] = g_new(GdkRGBA, 1);
-            custom_colors[i]->red = default_color->red;
-            custom_colors[i]->green = default_color->green;
-            custom_colors[i]->blue = default_color->blue;
-            custom_colors[i]->alpha = 1;
-            gtk_widget_override_background_color(CustomColor[i], GTK_STATE_NORMAL, custom_colors[i]);
+            GdkRGBA *custom_color = g_new(GdkRGBA, 1);
+            custom_color->red = default_color->red;
+            custom_color->green = default_color->green;
+            custom_color->blue = default_color->blue;
+            custom_color->alpha = 1;
+            gtk_color_chooser_set_rgba(CustomColor[i], custom_color);
 
-            g_signal_connect(CustomColor[i], "clicked", pick_color, custom_colors[i]);
             g_signal_connect(CustomDigit[i], "changed", validate_custom_entry_sensitive, CustomDigitEntry[i]);
         }
 
-        // colon (index 4 of custom_colors)
         CustomColor_Colon = gtk_builder_get_object(builder, "CustomColor-Colon");
-        custom_colors[4] = g_new(GdkRGBA, 1);
-        custom_colors[4]->red = default_color->red;
-        custom_colors[4]->green = default_color->green;
-        custom_colors[4]->blue = default_color->blue;
-        custom_colors[4]->alpha = 1;
-
-        gtk_widget_override_background_color(CustomColor_Colon, GTK_STATE_NORMAL, custom_colors[4]);
-        g_signal_connect(CustomColor_Colon, "clicked", pick_color, custom_colors[4]);
+        GdkRGBA *custom_colon = g_new(GdkRGBA, 1);
+        custom_colon->red = default_color->red;
+        custom_colon->green = default_color->green;
+        custom_colon->blue = default_color->blue;
+        custom_colon->alpha = 1;
+        gtk_color_chooser_set_rgba(CustomColor_Colon, custom_colon);
 
         for (int i=0; i<21; i++) {
             gchar* pixel_id[22];
@@ -197,6 +189,9 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         CustomDigitApplyIndex = gtk_builder_get_object(builder, "CustomDigitApplyIndex");
         CustomDigitApply = gtk_builder_get_object(builder, "CustomDigitApply");
         g_signal_connect(CustomDigitApply, "clicked", set_custom_digit, NULL);
+
+        CustomDigitApplyAll = gtk_builder_get_object(builder, "CustomDigitApplyAll");
+        g_signal_connect(CustomDigitApplyAll, "clicked", set_all_custom_digits, NULL);
 
         CustomUpdate = gtk_builder_get_object(builder, "CustomUpdate");
         g_signal_connect(CustomUpdate, "clicked", apply_custom_settings, NULL);
