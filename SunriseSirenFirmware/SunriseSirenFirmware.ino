@@ -80,6 +80,10 @@ void cycleState() {
   else currentState = CLOCK;
 }
 
+int getDigit(float value, int exponent) {
+  return (int)(value + 0.5) / (int) pow(10, exponent) % 10;
+}
+
 void setup() {
   WiFiManager wm;
   wm.setHostname(HOSTNAME);
@@ -95,9 +99,13 @@ void setup() {
     ArduinoOTA.begin();
 
     server.on("/", HTTP_GET, []() {
-      if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
+      const String targetURL = "https://github.com/ILoveAndLikePizza/SunriseSiren3000/releases";
+      String output = "<h1>Welcome to the Sunrise Siren 3000!</h1><h3>Please use <a href=\"";
+      output += targetURL;
+      output += "\">Sunrise Siren Studio</a> to configure the device.";
 
-      server.send(200, "text/plain", "Welcome to the Sunrise Siren 3000!\nPlease use Sunrise Siren Studio to configure the device.");
+      server.sendHeader("Location", targetURL, true);
+      server.send(301, "text/html", output);
     });
     server.on("/connect", HTTP_GET, []() {
       if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
@@ -253,7 +261,7 @@ void loop() {
 
   ldr.update();
   button.update();
-  if (ticks % 50 == 0) {
+  if (ticks % 100 == 0) { // every 2 seconds:
     ntp.update();
     sht21.update();
   }
@@ -293,16 +301,16 @@ void loop() {
     buzzer.enabled = alarms[d].activity;
     buzzer.update();
   } else if (currentState == TEMPERATURE) {
-    lights.showSingleDigit(0, (int)sht21.temperature / 10 % 10, lights.defaultColor);
-    lights.showSingleDigit(1, (int)sht21.temperature % 10, lights.defaultColor);
+    lights.showSingleDigit(0, getDigit(sht21.temperature, 1), lights.defaultColor);
+    lights.showSingleDigit(1, getDigit(sht21.temperature, 0), lights.defaultColor);
     lights.showSingleDigit(2, DIGIT_DEGREE, lights.defaultColor);
     lights.showSingleDigit(3, DIGIT_C, lights.defaultColor);
     lights.setColonPoint(CRGB::Black);
   } else if (currentState == HUMIDITY) {
     lights.showSingleDigit(0, DIGIT_H, lights.defaultColor);
     lights.showSingleDigit(1, DIGIT_u, lights.defaultColor);
-    lights.showSingleDigit(2, (int)sht21.humidity / 10 % 10, lights.defaultColor);
-    lights.showSingleDigit(3, (int)sht21.humidity % 10, lights.defaultColor);
+    lights.showSingleDigit(2, getDigit(sht21.humidity, 1), lights.defaultColor);
+    lights.showSingleDigit(3, getDigit(sht21.humidity, 0), lights.defaultColor);
     lights.setColonPoint(lights.defaultColor);
   } else if (currentState == ALARM_PREVIEW) {
     bool alarmAlreadyTrippedToday = (t >= alarms[d].time);
