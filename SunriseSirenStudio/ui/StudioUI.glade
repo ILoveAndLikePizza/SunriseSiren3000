@@ -2820,12 +2820,16 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="AboutProgram">
-                    <property name="label" translatable="yes">About Sunrise Siren Studio...</property>
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="margin-top">32</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-top">22</property>
+                    <property name="margin-bottom">8</property>
+                    <property name="label" translatable="yes">Sunrise Siren 3000</property>
+                    <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -2834,20 +2838,63 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="RebootClock">
-                    <property name="label" translatable="yes">Reboot Sunrise Siren 3000</property>
+                  <object class="GtkButton" id="SleepClock">
+                    <property name="label" translatable="yes">Set Sunrise Siren 3000 to sleep mode</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="margin-top">12</property>
-                    <style>
-                      <class name="destructive-action"/>
-                    </style>
+                    <property name="tooltip-text" translatable="yes">Turns off the LEDs of the Sunrise Siren 3000. They turn on again after a button press, a custom mode/settings/countdown update, a reboot or an alarm.</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="RebootClock">
+                    <property name="label" translatable="yes">Reboot Sunrise Siren 3000</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes">Restarts the ESP32 inside the Sunrise Siren 3000. Recommended action when you notice that the clock is not reacting quickly to button presses.</property>
+                    <property name="margin-top">12</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">7</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-top">22</property>
+                    <property name="margin-bottom">8</property>
+                    <property name="label" translatable="yes">Sunrise Siren Studio</property>
+                    <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">8</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="AboutProgram">
+                    <property name="label" translatable="yes">About Sunrise Siren Studio...</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">9</property>
                   </packing>
                 </child>
                 <child>
@@ -2864,7 +2911,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">7</property>
+                    <property name="position">10</property>
                   </packing>
                 </child>
               </object>

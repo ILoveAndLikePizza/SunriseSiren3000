@@ -1,7 +1,7 @@
 #ifndef _sunrise_siren_studio_h
 #define _sunrise_siren_studio_h
 
-#define VERSION "v1.2.0"
+#define VERSION "v1.3.0"
 
 #include <stdlib.h>
 #include <math.h>
@@ -79,9 +79,10 @@ GtkLabel *SHT21TemperatureReading;
 GtkLabel *SHT21HumidityReading;
 GtkButton *SensorRefresh;
 
-// about/danger zone
-GtkButton *AboutProgram;
+// Miscellaneous Sunrise Siren Stuff
+GtkButton *SleepClock;
 GtkButton *RebootClock;
+GtkButton *AboutProgram;
 GtkButton *Reconfigure;
 
 // ConnectionWindow

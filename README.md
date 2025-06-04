@@ -47,11 +47,11 @@ The clock's firmware contains sensitive information, which is required to make c
 1. Ensure that the required libraries are installed.  
 With `apt`, those can be installed by running:
     ```bash
-    sudo apt install gcc libgtk-3-dev libcurl4-openssl-dev libjson-c-dev
+    sudo apt install gcc make gzip libgtk-3-dev libcurl4-openssl-dev libjson-c-dev
     ```
     And with `dnf`:
     ```bash
-    sudo dnf install gcc gtk3-devel libcurl-devel json-c-devel
+    sudo dnf install gcc make gzip gtk3-devel libcurl-devel json-c-devel
     ```
 2. Navigate to the `SunriseSirenStudio` directory.
 3. Compile the program by running:

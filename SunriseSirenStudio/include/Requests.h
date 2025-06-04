@@ -28,6 +28,9 @@ gchar* request(gchar* method, gchar* url, gchar* username, gchar* password, gcha
     CURL *curl = curl_easy_init();
     if (!curl) return "Error while initializing CURL";
 
+    char* ua[18];
+    sprintf(ua, "sunrise-siren-studio/%s", VERSION);
+
     gchar *userpwd[strlen(username) + strlen(password) + 32];
     sprintf(userpwd, "%s:%s", str_escape(username, ':'), str_escape(password, ':'));
 
@@ -37,6 +40,7 @@ gchar* request(gchar* method, gchar* url, gchar* username, gchar* password, gcha
     curl_easy_setopt(curl, CURLOPT_URL, url);
     curl_easy_setopt(curl, CURLOPT_USERPWD, userpwd);
     curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, method);
+    curl_easy_setopt(curl, CURLOPT_USERAGENT, ua);
     if (method == "POST") {
         curl_easy_setopt(curl, CURLOPT_POST, 1L);
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data);

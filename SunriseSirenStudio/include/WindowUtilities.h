@@ -15,6 +15,24 @@ void reboot_program() {
     exit(2);
 }
 
+void sleep_clock() {
+    gchar *sleep_url[PATH_MAX];
+    sprintf(sleep_url, "http://%s/sleep", hostname);
+
+    gchar *zzz = request("PATCH", sleep_url, username, password, "");
+
+    if (zzz && request_last_status_code == 200) {
+        // sleep mode performed successful
+        show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Success!", "Your Sunrise Siren 3000 falls asleep now... zzz");
+    } else if (zzz && request_last_status_code == 418) {
+        // device is already in sleep mode
+        show_message_dialog(MainWindow, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, "zzz", "Your Sunrise Siren 3000 is already sleeping.\nTo wake it up again, push the button on top of the device.");
+    } else {
+        // error while trying to perform sleep mode
+        show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Failed to sleep", "An error occurred while rebooting your Sunrise Siren 3000. Please try again later.");
+    }
+}
+
 void reboot_clock() {
     gint prompt = show_message_dialog(MainWindow, GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO, "Reboot?", "Are you sure you want to reboot your Sunrise Siren 3000?");
 

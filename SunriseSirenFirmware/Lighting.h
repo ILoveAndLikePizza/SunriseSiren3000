@@ -92,8 +92,10 @@ class SunriseSiren3000Lighting {
       for (int i=0; i<2; i++) this->leds[colonPoints[i]] = color;
     }
 
-    void update(uint8_t brightness) {
-      FastLED.setBrightness(brightness);
+    void update(int brightness) {
+      uint8_t constrainedBrightness = max(brightness, 0);
+
+      FastLED.setBrightness(constrainedBrightness);
       FastLED.show();
     }
 

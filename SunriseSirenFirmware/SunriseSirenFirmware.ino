@@ -39,6 +39,8 @@ unsigned long ticks = 0;
 unsigned long rebootSignalSentAt = 0;
 unsigned long lastStateCycledAt = 0;
 enum State currentState = CLOCK;
+bool asleep = false;
+int sleepLevel = 0; // 0 = not asleep, MAX_BRIGHTNESS = zzz
 
 unsigned int snoozeInterval;
 unsigned int clockReturn;
@@ -50,6 +52,17 @@ String alarmTimes;
 int customSegments[4];
 CRGB customColors[4];
 CRGB customColonPoint;
+
+void sendGitHubRedirect() {
+  const String targetURL = "https://github.com/ILoveAndLikePizza/SunriseSiren3000/releases";
+
+  String output = "<h1>Welcome to the Sunrise Siren 3000!</h1><h3>Please use <a href=\"";
+  output += targetURL;
+  output += "\">Sunrise Siren Studio</a> to configure the device.";
+
+  server.sendHeader("Location", targetURL, true);
+  server.send(301, "text/html", output);
+}
 
 void loadSettings() {
   lights.defaultColor = CRGB(pref.getInt("default-c"));
@@ -98,22 +111,19 @@ void setup() {
     ArduinoOTA.setPassword(OTHER_PASSWORD);
     ArduinoOTA.begin();
 
-    server.on("/", HTTP_GET, []() {
-      const String targetURL = "https://github.com/ILoveAndLikePizza/SunriseSiren3000/releases";
-      String output = "<h1>Welcome to the Sunrise Siren 3000!</h1><h3>Please use <a href=\"";
-      output += targetURL;
-      output += "\">Sunrise Siren Studio</a> to configure the device.";
+    const char *headerKeys[] = {"User-Agent"};
+    server.collectHeaders(headerKeys, 1);
 
-      server.sendHeader("Location", targetURL, true);
-      server.send(301, "text/html", output);
-    });
+    server.on("/", HTTP_GET, sendGitHubRedirect);
     server.on("/connect", HTTP_GET, []() {
       if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
+      else if (!server.header("User-Agent").startsWith("sunrise-siren-studio/v")) return sendGitHubRedirect();
 
       server.send(200, "text/plain", "Yes, a Sunrise Siren 3000 is here!");
     });
     server.on("/status", HTTP_GET, []() {
       if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
+      else if (!server.header("User-Agent").startsWith("sunrise-siren-studio/v")) return sendGitHubRedirect();
 
       String output = "{\n  \"colors\": {\n    \"default\": ";
       output.concat(lights.defaultColor.as_uint32_t());
@@ -141,6 +151,7 @@ void setup() {
     });
     server.on("/sensors", HTTP_GET, []() {
       if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
+      else if (!server.header("User-Agent").startsWith("sunrise-siren-studio/v")) return sendGitHubRedirect();
 
       String output = "{\n  \"ldr\": ";
       output.concat(ldr.rawValue);
@@ -158,6 +169,7 @@ void setup() {
     });
     server.on("/update", HTTP_POST, []() {
       if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
+      else if (!server.header("User-Agent").startsWith("sunrise-siren-studio/v")) return sendGitHubRedirect();
 
       pref.begin("SS3000-Conf", false);
 
@@ -191,11 +203,13 @@ void setup() {
 
       ntp.setDST(enableDST);
 
+      asleep = false;
       currentState = CLOCK;
       server.send(200, "text/plain", "Done!");
     });
     server.on("/custom", HTTP_POST, []() {
       if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
+      else if (!server.header("User-Agent").startsWith("sunrise-siren-studio/v")) return sendGitHubRedirect();
 
       for (int i=0; i<4; i++) {
         if (server.hasArg("segment-" + String(i))) customSegments[i] = server.arg("segment-" + String(i)).toInt();
@@ -203,10 +217,14 @@ void setup() {
       }
       if (server.hasArg("color-colon")) customColonPoint = CRGB(server.arg("color-colon").toInt());
 
+      asleep = false;
       currentState = CUSTOM;
       server.send(200, "text/plain", "Done!");
     });
     server.on("/countdown", HTTP_POST, []() {
+      if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
+      else if (!server.header("User-Agent").startsWith("sunrise-siren-studio/v")) return sendGitHubRedirect();
+
       if (!server.hasArg("t") && !server.hasArg("pauseable")) {
         server.send(400, "text/plain", "Missing arguments.");
         return;
@@ -215,15 +233,29 @@ void setup() {
 
       countdown.pauseable = (server.arg("pauseable").toInt() == 1);
       countdown.start(totalSeconds);
-      currentState = COUNTDOWN;
 
+      asleep = false;
+      currentState = COUNTDOWN;
       server.send(200, "text/plain", "Done!");
     });
     server.on("/reboot", HTTP_PATCH, []() {
       if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
+      else if (!server.header("User-Agent").startsWith("sunrise-siren-studio/v")) return sendGitHubRedirect();
 
       server.send(200, "text/plain", "Initiating reboot.");
       rebootSignalSentAt = millis();
+    });
+    server.on("/sleep", HTTP_PATCH, []() {
+      if (!server.authenticate(HTTP_USERNAME, HTTP_PASSWORD)) return server.requestAuthentication();
+      else if (!server.header("User-Agent").startsWith("sunrise-siren-studio/v")) return sendGitHubRedirect();
+
+      if (asleep) {
+        server.send(418, "text/plain", "zzz... huh? I'm a teapot already doing zzz!");
+      } else {
+        asleep = true;
+
+        server.send(200, "text/plain", "zzz");
+      }
     });
     server.onNotFound([]() {
       server.send(404, "text/plain", "404 Not Found");
@@ -259,6 +291,12 @@ void loop() {
 
   if (rebootSignalSentAt > 0 && millis() - rebootSignalSentAt >= 1500) ESP.restart();
 
+  if (asleep) {
+    if (++sleepLevel >= MAX_BRIGHTNESS) sleepLevel = MAX_BRIGHTNESS;
+  } else {
+    if (--sleepLevel <= 0) sleepLevel = 0;
+  }
+
   ldr.update();
   button.update();
   if (ticks % 100 == 0) { // every 2 seconds:
@@ -271,11 +309,12 @@ void loop() {
   int d = ntp.getDay();
 
   if (button.released) {
-    if (alarms[d].tripping) alarms[d].snooze();
-    else if (currentState == COUNTDOWN && !countdown.ended) countdown.togglePause();
-    else cycleState();
-
-  } else if (button.held) {
+    if (asleep) asleep = false; else {
+      if (alarms[d].tripping) alarms[d].snooze();
+      else if (currentState == COUNTDOWN && !countdown.ended) countdown.togglePause();
+      else cycleState();
+    }
+  } else if (button.held && !asleep) {
     if (alarms[d].tripping || alarms[d].snoozed) alarms[d].stop();
     else if (currentState == COUNTDOWN) currentState = CLOCK;
     else {
@@ -284,10 +323,12 @@ void loop() {
     }
   }
 
+  bool alarmJustTripped = alarms[d].update(t, snoozeInterval);
   if (
     (millis() - lastStateCycledAt >= clockReturn && !(currentState == CLOCK || currentState == CUSTOM || currentState == COUNTDOWN)) ||
-    alarms[d].update(t, snoozeInterval)
+    alarmJustTripped
   ) currentState = CLOCK;
+  if (alarmJustTripped) asleep = false;
 
   if (currentState == CLOCK) {
     if (countdown.started) countdown.stop();
@@ -341,7 +382,7 @@ void loop() {
 
   int brightness = ldr.averagedValue;
   if (buzzer.enabled) brightness += ALARM_BRIGHTNESS_INCREMENT;
-  lights.update(brightness);
+  lights.update(brightness - sleepLevel);
 
   delay(20);
   ticks++;

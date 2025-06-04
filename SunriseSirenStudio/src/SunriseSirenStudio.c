@@ -214,11 +214,14 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         get_sensor_values();
 
         // Other buttons
-        AboutProgram = gtk_builder_get_object(builder, "AboutProgram");
-        g_signal_connect(AboutProgram, "clicked", show_about_dialog, NULL);
-
+        SleepClock = gtk_builder_get_object(builder, "SleepClock");
+        g_signal_connect(SleepClock, "clicked", sleep_clock, NULL);
+        
         RebootClock = gtk_builder_get_object(builder, "RebootClock");
         g_signal_connect(RebootClock, "clicked", reboot_clock, NULL);
+        
+        AboutProgram = gtk_builder_get_object(builder, "AboutProgram");
+        g_signal_connect(AboutProgram, "clicked", show_about_dialog, NULL);
 
         Reconfigure = gtk_builder_get_object(builder, "Reconfigure");
         g_signal_connect(Reconfigure, "clicked", reconfigure, NULL);

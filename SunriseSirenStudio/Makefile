@@ -9,6 +9,8 @@ default: src/SunriseSirenStudio.c schema/org.x.sunrise-siren-studio.credentials.
 	mkdir -p build
 	gcc -o build/sunrise-siren-studio src/SunriseSirenStudio.c `pkg-config --cflags --libs gtk+-3.0 libcurl json-c` -lm
 
+	gzip -kvf man/sunrise-siren-studio.1
+
 	glib-compile-schemas schema/
 
 install:
@@ -18,6 +20,7 @@ install:
 	cp schema/org.x.sunrise-siren-studio.credentials.gschema.xml $(SHAREDIR)/glib-2.0/schemas
 	cp dist/sunrise-siren-studio.desktop $(SHAREDIR)/applications
 	cp dist/sunrise-siren-studio.png $(SHAREDIR)/icons/hicolor/256x256@2/apps
+	cp man/sunrise-siren-studio.1.gz $(SHAREDIR)/man/man1
 
 	gtk-update-icon-cache $(SHAREDIR)/icons/hicolor
 	glib-compile-schemas $(SHAREDIR)/glib-2.0/schemas
@@ -26,7 +29,8 @@ uninstall:
 	rm $(BINDIR)/sunrise-siren-studio
 	rm $(SHAREDIR)/glib-2.0/schemas/org.x.sunrise-siren-studio.credentials.gschema.xml
 	rm $(SHAREDIR)/applications/sunrise-siren-studio.desktop
-	rm $(SHAREDIR)/icons/hicolor/256x256@2/apps/sunrise-siren-studio.png
+	rm $(SHAREDIR)/icons/hicolor/256x256@2/apps/sunrise-siren-studio.png\
+	rm $(SHAREDIR)/man/man1/sunrise-siren-studio.1.gz
 
 	gtk-update-icon-cache $(SHAREDIR)/icons/hicolor
 	glib-compile-schemas $(SHAREDIR)/glib-2.0/schemas
@@ -40,3 +44,4 @@ clean:
 	rm -rf build
 	rm include/UI.h
 	rm schema/gschemas.compiled
+	rm man/sunrise-siren-studio.1.gz
