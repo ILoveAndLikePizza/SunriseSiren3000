@@ -14,5 +14,8 @@ SunriseSirenStudio/build/*
 # ignore compiled GSchemas
 gschemas.compiled
 
-# ignore the minified UI file, since the `minify-ui` script will generate it
+# ignore gzipped manual entries
+*.gz
+
+# ignore the minified UI file, since `make` will generate it
 UI.h
