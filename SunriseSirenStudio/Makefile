@@ -29,7 +29,7 @@ uninstall:
 	rm $(BINDIR)/sunrise-siren-studio
 	rm $(SHAREDIR)/glib-2.0/schemas/org.x.sunrise-siren-studio.credentials.gschema.xml
 	rm $(SHAREDIR)/applications/sunrise-siren-studio.desktop
-	rm $(SHAREDIR)/icons/hicolor/256x256@2/apps/sunrise-siren-studio.png\
+	rm $(SHAREDIR)/icons/hicolor/256x256@2/apps/sunrise-siren-studio.png
 	rm $(SHAREDIR)/man/man1/sunrise-siren-studio.1.gz
 
 	gtk-update-icon-cache $(SHAREDIR)/icons/hicolor

@@ -473,13 +473,10 @@
             </child>
             <child>
               <object class="GtkButton" id="ReconfigureAfterError">
-                <property name="label" translatable="yes">Reset credentials</property>
+                <property name="label" translatable="yes">Edit credentials</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <style>
-                  <class name="destructive-action"/>
-                </style>
               </object>
               <packing>
                 <property name="expand">False</property>

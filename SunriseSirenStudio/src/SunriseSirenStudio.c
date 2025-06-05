@@ -27,7 +27,7 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
     enum TargetWindow target;
 
     // step 1: check if the config file exists
-    if (credentials_exist()) {
+    if (credentials_exist() && g_settings_get_boolean(credentials, "connect-immediately")) {
         // step 2: parse the config file
         credentials_read();
         // step 3: fetch /status en /sensors
@@ -231,7 +231,7 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         g_signal_connect(AboutProgram, "clicked", show_about_dialog, NULL);
 
         Reconfigure = gtk_builder_get_object(builder, "Reconfigure");
-        g_signal_connect(Reconfigure, "clicked", reconfigure, NULL);
+        g_signal_connect(Reconfigure, "clicked", reconfigure, TRUE);
 
         gtk_application_add_window(app, MainWindow);
         gtk_widget_show_all(MainWindow);
@@ -251,6 +251,12 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         ConnectUsername = gtk_builder_get_object(builder, "ConnectUsername");
         ConnectPassword = gtk_builder_get_object(builder, "ConnectPassword");
 
+        if (credentials_exist()) {
+            gtk_entry_set_text(ConnectHostname, g_settings_get_string(credentials, "hostname"));
+            gtk_entry_set_text(ConnectUsername, g_settings_get_string(credentials, "username"));
+            gtk_entry_set_text(ConnectPassword, g_settings_get_string(credentials, "password"));
+        }
+
         ConnectConfirm = gtk_builder_get_object(builder, "ConnectConfirm");
         g_signal_connect(ConnectConfirm, "clicked", create_connection, NULL);
 
@@ -269,7 +275,7 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         g_signal_connect(RetryAfterError, "clicked", reboot_program, NULL);
 
         ReconfigureAfterError = gtk_builder_get_object(builder, "ReconfigureAfterError");
-        g_signal_connect(ReconfigureAfterError, "clicked", reconfigure, NULL);
+        g_signal_connect(ReconfigureAfterError, "clicked", reconfigure, FALSE);
 
         gtk_application_add_window(app, ErrorWindow);
         gtk_widget_show_all(ErrorWindow);
