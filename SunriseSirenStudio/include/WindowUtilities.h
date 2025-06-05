@@ -32,7 +32,7 @@ void sleep_clock() {
         show_message_dialog(MainWindow, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, "Sleep mode failed", "Your Sunrise Siren 3000 cannot go to sleep mode in its current state.");
     } else {
         // error while trying to perform sleep mode
-        show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Sleep mode failed", "An error occurred while rebooting your Sunrise Siren 3000. Please try again later.");
+        show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Sleep mode failed", "An error occurred while setting your Sunrise Siren 3000 in sleep mode. Please try again later.");
     }
 }
 
