@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIR=$(dirname -- "$(readlink -f -- "$0")");
-VERSION=$(grep -Eh '#define VERSION "(.*?)"' "$DIR/../include/SunriseSirenStudio.h" | awk '{print $3}' | sed -E 's/("|v)//g')
+VERSION=$(sed -nE 's/#define VERSION "v(.*?)"/\1/p' "$DIR/../include/SunriseSirenStudio.h")
 DPKG_NAME="SunriseSirenStudio_${VERSION}_$(dpkg --print-architecture)"
 
 if [ ! -f "$DIR/../build/sunrise-siren-studio" ]; then
