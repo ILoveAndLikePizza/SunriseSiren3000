@@ -337,7 +337,7 @@ void loop() {
     }
   } else if (button.held && !asleep) {
     if (alarms[d].tripping || alarms[d].snoozed) alarms[d].stop();
-    else if (currentState == ALARM_PREVIEW) {
+    else if (currentState == ALARM_PREVIEW && alarms[alarmPreviewIndex].enabled) {
       currentState = ALARM_EDIT_HOURS;
       alarmEditHour = alarms[alarmPreviewIndex].time.substring(0, 2).toInt();
       alarmEditMinute = alarms[alarmPreviewIndex].time.substring(2, 4).toInt();
