@@ -4,6 +4,7 @@
 #define VERSION "v1.3.0"
 
 #include <stdlib.h>
+#include <pthread.h>
 #include <math.h>
 
 #include <gtk/gtk.h>
@@ -78,6 +79,7 @@ GtkLabel *LDRReading;
 GtkLabel *SHT21TemperatureReading;
 GtkLabel *SHT21HumidityReading;
 GtkButton *SensorRefresh;
+GtkListBoxRow *SensorRefreshRow;
 
 // Miscellaneous Sunrise Siren Stuff
 GtkButton *SleepClock;
@@ -101,10 +103,10 @@ GtkButton *ReconfigureAfterError;
 
 enum TargetWindow;
 
+void* thread_function();
 void do_absolutely_nothing() {};
 
 static void onActivate(GtkApplication *app, gpointer user_data);
-
 int main(int argc, char* argv[]);
 
 #endif

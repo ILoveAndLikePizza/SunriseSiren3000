@@ -2794,7 +2794,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkListBoxRow">
+                      <object class="GtkListBoxRow" id="SensorRefreshRow">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <child>

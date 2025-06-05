@@ -13,6 +13,13 @@ enum TargetWindow {
     WINDOW_ERROR
 };
 
+void* thread_function() {
+    while (1) {
+        get_sensor_values();
+        g_usleep(5e6);
+    }
+}
+
 static void onActivate(GtkApplication *app, gpointer user_data) {
     curl_global_init(CURL_GLOBAL_ALL);
     credentials = g_settings_new("org.x.sunrise-siren-studio.credentials");
@@ -211,7 +218,7 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
 
         SensorRefresh = gtk_builder_get_object(builder, "SensorRefresh");
         g_signal_connect(SensorRefresh, "clicked", get_sensor_values, NULL);
-        get_sensor_values();
+        SensorRefreshRow = gtk_builder_get_object(builder, "SensorRefreshRow");
 
         // Other buttons
         SleepClock = gtk_builder_get_object(builder, "SleepClock");
@@ -228,6 +235,14 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
 
         gtk_application_add_window(app, MainWindow);
         gtk_widget_show_all(MainWindow);
+
+        pthread_t thread_id;
+        if (pthread_create(&thread_id, NULL, thread_function, NULL) == 0) {
+            gtk_widget_set_visible(SensorRefreshRow, FALSE);
+        } else {
+            get_sensor_values();
+            show_message_dialog(MainWindow, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Note", "An error occured while starting the sensor values thread.\nYou have to refresh the sensor values manually.");
+        }
     } else if (target == WINDOW_CONNECTION) {
         ConnectionWindow = gtk_builder_get_object(builder, "ConnectionWindow");
         g_signal_connect(ConnectionWindow, "key-press-event", connection_window_key_press, NULL);
