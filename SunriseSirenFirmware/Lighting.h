@@ -102,5 +102,4 @@ class SunriseSiren3000Lighting {
     void error() {
       FastLED.showColor(CRGB::Red);
     }
-
 };
