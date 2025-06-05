@@ -27,9 +27,12 @@ void sleep_clock() {
     } else if (zzz && request_last_status_code == 418) {
         // device is already in sleep mode
         show_message_dialog(MainWindow, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, "zzz", "Your Sunrise Siren 3000 is already sleeping.\nTo wake it up again, push the button on top of the device.");
+    } else if (zzz && request_last_status_code == 400) {
+        // device cannot sleep in current state
+        show_message_dialog(MainWindow, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, "Sleep mode failed", "Your Sunrise Siren 3000 cannot go to sleep mode in its current state.");
     } else {
         // error while trying to perform sleep mode
-        show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Failed to sleep", "An error occurred while rebooting your Sunrise Siren 3000. Please try again later.");
+        show_message_dialog(MainWindow, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Sleep mode failed", "An error occurred while rebooting your Sunrise Siren 3000. Please try again later.");
     }
 }
 
