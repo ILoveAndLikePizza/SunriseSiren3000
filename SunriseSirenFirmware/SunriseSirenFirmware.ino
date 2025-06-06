@@ -70,7 +70,7 @@ void sendGitHubRedirect() {
 
 void loadSettings() {
   lights.defaultColor = CRGB(pref.getInt("default-c"));
-  lights.alarmColor = CRGB(pref.getInt("alarm-c"));
+  lights.highlightColor = CRGB(pref.getInt("highlight-c"));
   clockReturn = pref.getInt("clock-return");
   leadingZero = pref.getBool("leading-zero");
   enableDST = pref.getBool("enable-dst");
@@ -139,7 +139,7 @@ void setup() {
       String output = "{\n  \"colors\": {\n    \"default\": ";
       output.concat(lights.defaultColor.as_uint32_t());
       output.concat(",\n    \"alarm\": ");
-      output.concat(lights.alarmColor.as_uint32_t());
+      output.concat(lights.highlightColor.as_uint32_t());
       output.concat("\n  },\n  \"alarmsEnabled\": ");
       output.concat(alarmsEnabled);
       output.concat(",\n  \"alarmTimes\": \"");
@@ -186,8 +186,8 @@ void setup() {
 
       if (server.hasArg("default-c") && server.arg("default-c").toInt() != pref.getInt("default-c"))
         pref.putInt("default-c", server.arg("default-c").toInt());
-      if (server.hasArg("alarm-c") && server.arg("alarm-c").toInt() != pref.getInt("alarm-c"))
-        pref.putInt("alarm-c", server.arg("alarm-c").toInt());
+      if (server.hasArg("highlight-c") && server.arg("highlight-c").toInt() != pref.getInt("highlight-c"))
+        pref.putInt("highlight-c", server.arg("highlight-c").toInt());
 
       if (server.hasArg("clock-return") && server.arg("clock-return").toInt() != pref.getInt("clock-return"))
         pref.putInt("clock-return", server.arg("clock-return").toInt());
@@ -376,7 +376,7 @@ void loop() {
   if (currentState == CLOCK) {
     if (countdown.started) countdown.stop();
 
-    CRGB clockColor = (alarms[d].activity) ? lights.alarmColor : lights.defaultColor;
+    CRGB clockColor = (alarms[d].activity) ? lights.highlightColor : lights.defaultColor;
     CRGB colonColor = (!alarms[d].snoozed || millis() % 1000 < 750) ? clockColor : CRGB::Black;
 
     lights.showTime(t, clockColor, leadingZero);
@@ -403,8 +403,8 @@ void loop() {
     lights.showTime(preview, lights.defaultColor, leadingZero);
     lights.setColonPoint((millis() % colonFrequency < colonFrequency / 2) ? lights.defaultColor : CRGB::Black);
   } else if (currentState == ALARM_EDIT_HOURS || currentState == ALARM_EDIT_MINUTES) {
-    CRGB hourColor = (currentState == ALARM_EDIT_HOURS && millis() % 1000 < 500) ? lights.alarmColor : lights.defaultColor;
-    CRGB minuteColor = (currentState == ALARM_EDIT_MINUTES && millis() % 1000 < 500) ? lights.alarmColor : lights.defaultColor;
+    CRGB hourColor = (currentState == ALARM_EDIT_HOURS && millis() % 1000 < 500) ? lights.highlightColor : lights.defaultColor;
+    CRGB minuteColor = (currentState == ALARM_EDIT_MINUTES && millis() % 1000 < 500) ? lights.highlightColor : lights.defaultColor;
 
     lights.showSingleDigit(0, getDigit(alarmEditHour, 1), hourColor);
     lights.showSingleDigit(1, getDigit(alarmEditHour, 0), hourColor);
@@ -416,7 +416,7 @@ void loop() {
 
     lights.setColonPoint(customColonPoint);
   } else if (currentState == COUNTDOWN) {
-    CRGB clockColor = (countdown.activity) ? lights.alarmColor : lights.defaultColor;
+    CRGB clockColor = (countdown.activity) ? lights.highlightColor : lights.defaultColor;
 
     for (int i=0; i<4; i++) {
       int digit = countdown.currentTime / (int) pow(10, i) % 10;

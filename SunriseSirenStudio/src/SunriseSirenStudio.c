@@ -76,15 +76,15 @@ static void onActivate(GtkApplication *app, gpointer user_data) {
         default_color->alpha = 1;
         gtk_color_chooser_set_rgba(DefaultColor, default_color);
 
-        AlarmColor = gtk_builder_get_object(builder, "AlarmColor");
+        HighlightColor = gtk_builder_get_object(builder, "HighlightColor");
 
-        glong current_alarm_color = json_object_get_int64(json_object_object_get(json_object_object_get(clock_status, "colors"), "alarm"));
-        GdkRGBA *alarm_color = g_new(GdkRGBA, 1);
-        alarm_color->red = (gdouble) (current_alarm_color / (int) pow(256, 2) % 256) / 255;
-        alarm_color->green = (gdouble) (current_alarm_color / (int) pow(256, 1) % 256) / 255;
-        alarm_color->blue = (gdouble) (current_alarm_color / (int) pow(256, 0) % 256) / 255;
-        alarm_color->alpha = 1;
-        gtk_color_chooser_set_rgba(AlarmColor, alarm_color);
+        glong current_highlight_color = json_object_get_int64(json_object_object_get(json_object_object_get(clock_status, "colors"), "alarm"));
+        GdkRGBA *highlight_color = g_new(GdkRGBA, 1);
+        highlight_color->red = (gdouble) (current_highlight_color / (int) pow(256, 2) % 256) / 255;
+        highlight_color->green = (gdouble) (current_highlight_color / (int) pow(256, 1) % 256) / 255;
+        highlight_color->blue = (gdouble) (current_highlight_color / (int) pow(256, 0) % 256) / 255;
+        highlight_color->alpha = 1;
+        gtk_color_chooser_set_rgba(HighlightColor, highlight_color);
 
         // Alarms
         gchar* alarm_times = json_object_get_string(json_object_object_get(clock_status, "alarmTimes"));

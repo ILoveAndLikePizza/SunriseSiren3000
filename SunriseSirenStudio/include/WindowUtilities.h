@@ -59,6 +59,7 @@ static void reconfigure(GtkWidget *widget, gpointer do_reset) {
     if (do_reset) {
         gint prompt = show_message_dialog(MainWindow, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK_CANCEL, "Reset credentials?", "Note that you will have to sign in again!");
         if (prompt == GTK_RESPONSE_OK) credentials_reset();
+        else return;
     } else {
         set_connect_immediately(FALSE);
     }
@@ -185,16 +186,16 @@ void get_sensor_values() {
 static void apply_clock_settings(GtkWidget *widget, gpointer user_data) {
     // step 1: collect all settings
     GdkRGBA *default_c = g_new(GdkRGBA, 1);
-    GdkRGBA *alarm_c = g_new(GdkRGBA, 1);
+    GdkRGBA *highlight_c = g_new(GdkRGBA, 1);
     gtk_color_chooser_get_rgba(DefaultColor, &*default_c);
-    gtk_color_chooser_get_rgba(AlarmColor, &*alarm_c);
+    gtk_color_chooser_get_rgba(HighlightColor, &*highlight_c);
 
     glong default_c_number = (int) (default_c->red * 255) * (int) pow(256, 2)
         + (int) (default_c->green * 255) * (int) pow(256, 1)
         + (int) (default_c->blue * 255) * (int) pow(256, 0);
-    glong alarm_c_number = (int) (alarm_c->red * 255) * (int) pow(256, 2)
-        + (int) (alarm_c->green * 255) * (int) pow(256, 1)
-        + (int) (alarm_c->blue * 255) * (int) pow(256, 0);
+    glong highlight_c_number = (int) (highlight_c->red * 255) * (int) pow(256, 2)
+        + (int) (highlight_c->green * 255) * (int) pow(256, 1)
+        + (int) (highlight_c->blue * 255) * (int) pow(256, 0);
 
     gint alarms_enabled = 0;
     gint alarm_hours[7];
@@ -233,8 +234,8 @@ static void apply_clock_settings(GtkWidget *widget, gpointer user_data) {
     sprintf(post_url, "http://%s/update", hostname);
     sprintf(
         post_string,
-        "default-c=%ld&alarm-c=%ld&alarms-enabled=%i&alarm-times=%s&leading-zero=%i&enable-dst=%i&snooze-t=%i&clock-return=%i&ldr-min=%i&ldr-max=%i",
-        default_c_number, alarm_c_number, alarms_enabled, alarm_times, leading_zero, dst, snooze_t, return_after, ldr_min, ldr_max
+        "default-c=%ld&highlight-c=%ld&alarms-enabled=%i&alarm-times=%s&leading-zero=%i&enable-dst=%i&snooze-t=%i&clock-return=%i&ldr-min=%i&ldr-max=%i",
+        default_c_number, highlight_c_number, alarms_enabled, alarm_times, leading_zero, dst, snooze_t, return_after, ldr_min, ldr_max
     );
 
     // step 3: yeet a request

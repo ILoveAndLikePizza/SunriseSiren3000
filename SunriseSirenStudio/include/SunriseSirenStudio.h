@@ -33,7 +33,7 @@ GtkWindow *MainWindow;
 // Clock settings tab
 // Colors
 GtkColorButton *DefaultColor;
-GtkColorButton *AlarmColor;
+GtkColorButton *HighlightColor;
 
 // Alarms
 GtkSwitch *AlarmEnable[7];

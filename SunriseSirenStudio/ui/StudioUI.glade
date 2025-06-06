@@ -648,9 +648,9 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="tooltip-text" translatable="yes">The color of the clock while flashing during an alarm or ended countdown.</property>
+                                <property name="tooltip-text" translatable="yes">The color of the clock while flashing during an alarm, ended countdown or alarm time change.</property>
                                 <property name="margin-start">8</property>
-                                <property name="label" translatable="yes">Alarm</property>
+                                <property name="label" translatable="yes">Highlight</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -659,7 +659,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkColorButton" id="AlarmColor">
+                              <object class="GtkColorButton" id="HighlightColor">
                                 <property name="width-request">80</property>
                                 <property name="height-request">34</property>
                                 <property name="visible">True</property>
@@ -667,7 +667,7 @@
                                 <property name="receives-default">True</property>
                                 <property name="halign">end</property>
                                 <property name="hexpand">True</property>
-                                <property name="title" translatable="yes">Select an alarm color</property>
+                                <property name="title" translatable="yes">Select a highlight color</property>
                                 <property name="show-editor">True</property>
                               </object>
                               <packing>

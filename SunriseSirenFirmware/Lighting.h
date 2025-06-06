@@ -39,7 +39,7 @@ class SunriseSiren3000Lighting {
 
   public:
     CRGB defaultColor;
-    CRGB alarmColor;
+    CRGB highlightColor;
 
     void init() {
       FastLED.addLeds<WS2811, NEOPIXEL_PIN, GRB>(this->leds, 86).setCorrection(TypicalLEDStrip);
